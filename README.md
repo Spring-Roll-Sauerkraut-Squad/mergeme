@@ -1,1 +1,1 @@
-# airplane_tracker
+# airplane-tracker
