@@ -1,0 +1,23 @@
+@startuml heatmap
+
+left to right direction
+
+actor User as user
+
+package "Heatmap Page" {
+  usecase "View Real-time Learderboard/Heatmap" as view_real_time
+  usecase "View Historical Learderboard/Heatmap" as view_historical
+  usecase "Learderboard/Heatmap Filter" as filter
+
+  user --> view_real_time
+  user --> view_historical
+  user --> filter
+
+  view_real_time <-- view_historical : <<extends>>
+}
+note bottom of filter: Filter by time range and category
+note left of view_real_time: Defaults to last hour of data\n category = Airport
+note right of view_historical: Time range excludes today
+
+
+@enduml
