@@ -15,8 +15,14 @@ package "Heatmap Page" {
 
   view_real_time <-- view_historical : <<extends>>
 }
-note bottom of filter: Filter by time range and category
-note left of view_real_time: Defaults to last hour of data\n category = Airport
+note bottom of filter: Filter by time range
+
+note left of view_real_time
+Based on real-time data, from the start of the day
+Tree learderboard: top 10 airports, routes and danger zones
+Tree heatmaps: airports, routes and danger zones
+end note
+
 note right of view_historical: Time range excludes today
 
 
