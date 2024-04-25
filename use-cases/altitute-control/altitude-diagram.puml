@@ -1,0 +1,45 @@
+@startuml
+(Altitude Control System)
+skinparam packageStyle rectangle
+
+:Databases:
+rectangle DataSources {
+  :Databases: <-down- (DataSources) : Provides Data
+  :Dynamic Data:
+  :Static Data:
+}
+
+json Static {
+  "Airport": "Location",
+  "Airspace": "Req Altitude",
+  "Airspace": "Size"
+}
+
+:Static Data: -down- Static
+
+json Dynamic {
+  "Aircraft": "Location",
+  "Aircraft": "Geo Altitude",
+  "Aircraft": "Callsign"
+}
+
+:Dynamic Data: -down- Dynamic
+
+json DB {
+  "MongoDB": "Dynamic Data",
+  "Neo4J": "Dynamic Data",
+  "Redis": "Static Data"
+}
+
+:Databases: .left. DB
+:Databases: -right-> (Altitude Control System) : Updates Data
+
+:Pilot:
+:Air Traffic Control: <-up- :Flight Supervisor: : Informs
+:Air Traffic Control: -right-> :Pilot: : Alerts 
+
+:Flight Supervisor: <-up-> (Altitude Control System) : Uses the System
+(Altitude Control System) -right-> (Warning)
+"Throws Alert" as (Warning)
+(Warning) -down-> :Flight Supervisor: : Notifies 
+@enduml 
