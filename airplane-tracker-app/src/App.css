@@ -66,10 +66,19 @@ button {
   font-family: inherit;
   background-color: #303030;
   cursor: pointer;
-  transition: border-color 0.25s;
+  transition: background-color 0.25s, color 0.25s;
   margin-left: 100px;
   background-color: #363636;
   color: rgb(255, 255, 255);
+}
+
+button.active {
+  background-color: #1178ff;
+  color: white;
+}
+
+button.active:hover {
+  background-color: #1178ff;
 }
 
 .title h1 {
