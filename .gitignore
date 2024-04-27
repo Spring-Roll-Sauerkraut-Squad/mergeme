@@ -1,3 +1,9 @@
+#Database config
 .env
+.env.sample
 
+#Database data
+volumes
+
+#Node Modules
 node_modules

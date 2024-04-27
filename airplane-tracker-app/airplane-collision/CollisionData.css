@@ -1,0 +1,44 @@
+
+.container {
+  position: relative;
+}
+
+.flight-data {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2; 
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 50px;
+  border-radius: 5px;
+}
+
+
+.flight-data table {
+  width: 100%; 
+  border-collapse: collapse;
+}
+
+.flight-data h2 {
+  text-align: center;
+  color: #030000;
+}
+
+
+.flight-data th {
+  border: 1px solid #030000; 
+  padding: 10px;
+  text-align: left;
+  color: #030000;
+}
+
+.flight-data td {
+  border: 1px solid #040000; 
+  padding: 8px;
+  text-align: center;
+  color: #030000;
+}
+
+.leaflet-container {
+  z-index: 1; 
+}

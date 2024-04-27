@@ -3,6 +3,7 @@ import './App.css';
 import placeholderSky from './assets/placeholder_sky.jpg';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
+import CollisionData from '../airplane-collision/CollisionData';
 import AltitudeControl from './airplane-tracker/AltitudeControl/AltitudeControl';
 import PlaceholderMap from './airplane-tracker/PlaceholderMap/PlacerholderMap';
 
@@ -30,7 +31,7 @@ function App() {
               <div className='details-background'>
                 <Routes>
                   <Route path="/" element={<PlaceholderMap />} />
-                  <Route path="/collision-surveillance" element={<AltitudeControl />} />
+                  <Route path="/collision-surveillance" element={<CollisionData />} />
                   <Route path="/altitude-control" element={<AltitudeControl />} />
                   <Route path="/emergency-service" element={<AltitudeControl />} />
                   <Route path="/traffic-heatmap" element={<AltitudeControl />} />
