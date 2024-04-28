@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
 import './App.css';
-import placeholderSky from './assets/placeholder_sky.jpg';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import CollisionData from '../airplane-collision/CollisionData';
-import AltitudeControl from './airplane-tracker/AltitudeControl/AltitudeControl';
-import PlaceholderMap from './airplane-tracker/PlaceholderMap/PlacerholderMap';
+import AltitudeControl from '../altitude-control/AltitudeControl';
+
+import placeholderSky from "../placeholder/placeholder_sky.jpg"
+import PlaceholderMap from '../placeholder/PlacerholderMap';
 
 function App() {
   const [activeButton, setActiveButton] = useState(null);
@@ -74,9 +75,9 @@ function App() {
                   <Route path="/" element={<PlaceholderMap />} />
                   <Route path="/collision-surveillance" element={<CollisionData />} />
                   <Route path="/altitude-control" element={<AltitudeControl />} />
-                  <Route path="/emergency-service" element={<AltitudeControl />} />
-                  <Route path="/traffic-heatmap" element={<AltitudeControl />} />
-                  <Route path="/turbulence-detection" element={<AltitudeControl />} />
+                  <Route path="/emergency-service" element={<PlaceholderMap />} />
+                  <Route path="/traffic-heatmap" element={<PlaceholderMap />} />
+                  <Route path="/turbulence-detection" element={<PlaceholderMap />} />
                   <Route path="*" element={<h4 className='error'> Page not existent </h4>} />
                 </Routes>
               </div>
