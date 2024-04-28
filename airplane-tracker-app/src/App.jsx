@@ -14,13 +14,17 @@ function App() {
     setActiveButton(buttonName);
   };
 
+  const handleTitleClick = () => {
+    setActiveButton(null); // Reset activeButton state when title is clicked
+  };
+
   return (
     <Router>
       <div className="background" style={{ backgroundImage: `url(${placeholderSky})` }}>
         <div className="window">
           <div className="content">
             <div className="menu-area">
-              <Link to="/" className='title'>
+              <Link to="/" className='title' onClick={handleTitleClick}>
                 <h1>
                   Airplane<br />Tracker
                 </h1>
@@ -71,7 +75,7 @@ function App() {
             <div className="details-area">
               <div className='details-background'>
                 <Routes>
-                  <Route path="/" element={<PlaceholderMap />} />
+                <Route path="/" element={<PlaceholderMap />} />
                   <Route path="/collision-surveillance" element={<CollisionData />} />
                   <Route path="/altitude-control" element={<AltitudeControl />} />
                   <Route path="/emergency-service" element={<AltitudeControl />} />

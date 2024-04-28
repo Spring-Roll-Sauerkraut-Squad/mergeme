@@ -2,9 +2,9 @@ import React, { useEffect } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const MapWindow = () => {
+const Map = () => {
   useEffect(() => {
-    const map = L.map('map').setView([49.4, 8.7], 13);
+    const map = L.map('map').setView([49.4, 8.7], 5);
 
     
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -20,4 +20,4 @@ const MapWindow = () => {
   return <div id="map" style={{ width: '1700px', height: '1500px', margin: 'auto' }}></div>;
 };
 
-export default MapWindow;
+export default Map;
