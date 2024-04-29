@@ -47,9 +47,11 @@ html, body {
   flex: 4;
   width: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   border-radius: 10px;
+  box-shadow: 0 8px 6px -6px #000000;
+  padding: 5px;
 }
 
 .buttons {

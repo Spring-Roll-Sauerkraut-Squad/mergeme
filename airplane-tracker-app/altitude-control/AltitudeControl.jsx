@@ -1,19 +1,23 @@
 import "./AltitudeControl.css";
-import React from "react";
-import Map from "../airplane-collision/Map.jsx";
+import React, { useState, useEffect } from "react";
 import PlaceholderMap from "../placeholder/PlacerholderMap.jsx";
+import FlightsDisplay from "./FlightsDisplay.jsx";
+import Filter from "./Filter.jsx";
 
 const AltitudeControl = () => {
     return (
-        <div className="altitude-content">
-            <div className="description" >
-                <h2> Click on an airplane to get more information! </h2>
+        <div className="altitude-window">
+            <div className="info-description" >
+                <h2> Welcome to the Altitude Supervision! </h2>
             </div >
-            <div className="test">
-                <div className="altitude-details">
-                    <h1>Altitude Control</h1>
+            <div className="altitude-content">
+                <div className="flight-details">
+                    <h1> Active Flights: </h1>
+                    <Filter />
+                    <FlightsDisplay />
                 </div>
-                <div className="altitude-map">
+                <div className="flight-map">
+                    <h1> | Active Flights - Live Data | </h1>
                     <PlaceholderMap />
                 </div>
             </div>

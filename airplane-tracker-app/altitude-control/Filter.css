@@ -1,0 +1,34 @@
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgb(240, 240, 240);
+    border: 1px solid black;
+    border-radius: 10px;
+    width: 400px;
+    padding: 10px;
+    margin: 10px;
+}
+
+.header {
+    color: #000000;
+    font-size: x-large;
+}
+
+.options {
+    color: #ffffff;
+    background-color: 121212;
+    padding: 10px;
+    margin: 7px;
+    font-size: large;
+    border: 2px solid black;
+    border-radius: 10px;
+    width: 200px;
+}
+
+.selection {
+    color: #000000;
+    font-size: medium;
+    padding: 10px;
+}
