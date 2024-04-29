@@ -1,12 +1,17 @@
 import axios from 'axios';
 import { URL } from './constants';
 
-//const fs = require('fs');
-
 export async function FetchFlights() {
-    const url = 'https://opensky-network.org/api/states/all';
+    console.log('pressed');
+    const username = 'FAH';
+    const password = 'TL]M2{C632Z+';
+    const basicAuth = 'Basic ' + btoa(username + ':' + password);
+
+    const url = "https://opensky-network.org/api/states/own";
     try {
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+            headers: { Authorization: basicAuth }
+        });
         const rawData = response.data;
         const filteredData = rawData.states.map(state => ({
             ica024: state[0],
@@ -29,15 +34,3 @@ export async function FetchFlights() {
         return [];
     }
 }
-
-/*
-async function saveDataToFile() {
-    const data = await fetchData();
-    if (data) {
-        fs.writeFileSync('data.json', JSON.stringify(data, null, 2));
-        console.log('Data saved to data. json');
-    }
-}
-
-saveDataToFile();
-*/
