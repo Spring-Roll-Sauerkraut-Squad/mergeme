@@ -2,6 +2,7 @@ import "./AltitudeControl.css";
 import React, { useState, useEffect } from "react";
 import PlaceholderMap from "../placeholder/PlacerholderMap.jsx";
 import FlightsDisplay from "./FlightsDisplay.jsx";
+import AltitudeMap from "./AltitudeMap.jsx";
 import Filter from "./Filter.jsx";
 
 const AltitudeControl = () => {
@@ -17,8 +18,8 @@ const AltitudeControl = () => {
                     <FlightsDisplay />
                 </div>
                 <div className="flight-map">
-                    <h1> | Active Flights - Live Data | </h1>
-                    <PlaceholderMap />
+                    <h1> | Live Map Data | </h1>
+                    <AltitudeMap />
                 </div>
             </div>
         </div >

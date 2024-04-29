@@ -1,3 +1,4 @@
+import "./AltitudeMap.css";
 import React, { useEffect } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -16,7 +17,7 @@ const AltitudeMap = () => {
     };
   }, []); 
 
-  return <div id="map" style={{ width: '1700px', height: '1500px', margin: 'auto' }}></div>;
+  return <div id="map"></div>; 
 };
 
 export default AltitudeMap;
