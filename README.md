@@ -1,6 +1,6 @@
 # airplane-tracker
 
-This project, undertaken as part of the Advanced Database research project at SRH Heidelberg University, focuses on airplane tracking and data analysis under the guidance of Professor Frank Hefter.
+This project, undertaken as part of the Advanced Database course project at SRH Heidelberg University, focuses on airplane tracking and data analysis under the guidance of Professor Frank Hefter.
 
 ## Database Setup
 

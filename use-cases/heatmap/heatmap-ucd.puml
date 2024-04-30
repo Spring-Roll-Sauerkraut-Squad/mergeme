@@ -18,12 +18,11 @@ package "Heatmap Page" {
 note bottom of filter: Filter by time range
 
 note left of view_real_time
-Based on real-time data, from the start of the day
-Tree learderboard: top 10 airports, routes and danger zones
-Tree heatmaps: airports, routes and danger zones
+Based on simulated real-time data, from the start of the day:
+Top 10 airports, routes
+Heatmaps: airports, routes
 end note
 
 note right of view_historical: Time range excludes today
-
 
 @enduml
