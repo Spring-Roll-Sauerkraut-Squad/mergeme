@@ -1,5 +1,9 @@
+.map {
+    padding: 50px;
+}
+
 .map img {
-    margin: 20px, 20px, 20px, 20px;
+    margin: 20px;
     width: 100%;
     height: auto;
     max-height: 100%;
