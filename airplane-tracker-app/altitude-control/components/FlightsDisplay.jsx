@@ -1,6 +1,6 @@
 import "./FlightsDisplay.css"
 import React, { useState, useEffect } from 'react';
-import { FetchFlights } from './FetchFlights'; 
+import { FetchFlights } from "../scripts/FetchFlights";
 
 function FlightsDisplay() {
     const [flights, setFlights] = useState([]);

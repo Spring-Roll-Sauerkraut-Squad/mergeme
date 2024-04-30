@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { URL } from './constants';
+import { URL } from '../constants'
 
 export async function FetchFlights() {
     console.log('pressed');

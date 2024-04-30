@@ -1,11 +1,12 @@
 import "./AltitudeControl.css";
 import React, { useState, useEffect } from "react";
-import PlaceholderMap from "../placeholder/PlacerholderMap.jsx";
-import FlightsDisplay from "./FlightsDisplay.jsx";
-import AltitudeMap from "./AltitudeMap.jsx";
-import Filter from "./Filter.jsx";
+import FlightsDisplay from "./components/FlightsDisplay.jsx";
+import AltitudeMap from "./components/AltitudeMap.jsx";
+import Filter from "./components/Filter.jsx";
+import FetchAirports from "./scripts/FetchAirports.jsx";
 
 const AltitudeControl = () => {
+    const [airports, setAirports] = useState([]);
    
     const airport1 = {
         name: 'Flughafen München',
@@ -21,6 +22,10 @@ const AltitudeControl = () => {
         ],
     };
 
+
+    FetchAirports();
+
+
     return (
         <div className="altitude-window">
             <div className="info-description" >
@@ -34,7 +39,7 @@ const AltitudeControl = () => {
                 </div>
                 <div className="flight-map">
                     <h1> | Live Map Data | </h1>
-                    <AltitudeMap airports={[airport1, airport2]} />
+                    <AltitudeMap airports={airports} />
                 </div>
             </div>
         </div >
