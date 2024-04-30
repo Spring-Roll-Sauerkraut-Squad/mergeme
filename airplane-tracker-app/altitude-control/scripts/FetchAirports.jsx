@@ -1,12 +1,11 @@
-import * as axios from 'axios';
+import axios from 'axios';
 
 const FetchAirports = () => {
-    axios.get('http://localhost:3000/api/airports')
-        .then(response => {
-            console.log('Airports:', response.data);
-        })
+    return axios.get('http://localhost:3000/api/airports')
+        .then(response => response.data)
         .catch(error => {
             console.error('Error fetching airports:', error);
+            return [];
         });
 }
 

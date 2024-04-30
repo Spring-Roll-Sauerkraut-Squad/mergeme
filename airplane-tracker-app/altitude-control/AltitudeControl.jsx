@@ -7,24 +7,12 @@ import FetchAirports from "./scripts/FetchAirports.jsx";
 
 const AltitudeControl = () => {
     const [airports, setAirports] = useState([]);
-   
-    const airport1 = {
-        name: 'Flughafen München',
-        location: [
-            { latitude: 48.35389, longitude: 11.78611 }
-        ],
-    };
 
-    const airport2 = {
-        name: 'Flughafen Frankfurt Main',
-        location: [
-            { latitude: 50.03333, longitude: 8.57056 }
-        ],
-    };
-
-
-    FetchAirports();
-
+    useEffect(() => {
+        FetchAirports().then(data => {
+            setAirports(data);
+        })
+    }, []);
 
     return (
         <div className="altitude-window">

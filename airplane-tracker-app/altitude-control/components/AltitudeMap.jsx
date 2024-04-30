@@ -12,7 +12,7 @@ const AltitudeMap = ({ airports }) => {
       maxZoom: 19,
     }).addTo(map);
 
-    //Red Marker for Airports
+    //Red Marker - Airports
     const airportMarker = new L.Icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png',
       shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -22,7 +22,6 @@ const AltitudeMap = ({ airports }) => {
       shadowSize: [41, 41]
     });
 
-    //Add Markers
     airports.forEach(airport => {
       L.marker([airport.location[0].latitude, airport.location[0].longitude], { icon: airportMarker })
         .addTo(map)

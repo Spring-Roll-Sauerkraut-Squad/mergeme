@@ -2,12 +2,12 @@ import axios from 'axios';
 import { URL } from '../constants'
 
 export async function FetchFlights() {
-    console.log('pressed');
-    const username = 'FAH';
-    const password = 'TL]M2{C632Z+';
+    console.log('flights fetched');
+    const username = process.env.USERNAME_API;
+    const password = process.env.PASSWORD_API;
     const basicAuth = 'Basic ' + btoa(username + ':' + password);
-
     const url = "https://opensky-network.org/api/states/own";
+    
     try {
         const response = await axios.get(url, {
             headers: { Authorization: basicAuth }
