@@ -18,7 +18,7 @@ function FlightsDisplay() {
 
     if (isLoading) return <div>Loading flights data...</div>;
     if (!flights.length) return <div>No flight data available.</div>;
- 
+
     return (
         <div className="flight-data-container">
             <h1 className="flight-data-header">All Fetched Flight Data: </h1>

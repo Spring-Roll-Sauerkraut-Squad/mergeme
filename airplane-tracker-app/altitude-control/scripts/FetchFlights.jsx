@@ -2,8 +2,14 @@ import axios from 'axios';
 
 export async function FetchFlights() {
     try {
-        const response = await axios.get('/api/flights');
+        const response = await axios.get('http://localhost:3000/api/flights');
         const rawData = response.data;
+
+        if (!rawData.states) {
+            console.error('No states data available');
+            return [];
+        }
+
         const filteredData = rawData.states.map(state => ({
             icao24: state[0],
             callsign: state[1].trim(),
@@ -19,9 +25,10 @@ export async function FetchFlights() {
             spi: state[14],
             positionSource: state[15]
         }));
+
         return filteredData;
     } catch (error) {
-        console.error('Error fetching data:', error);
+        console.error('Error fetching flights:', error);
         return [];
     }
 }

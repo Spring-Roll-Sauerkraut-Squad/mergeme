@@ -3,7 +3,9 @@ import React, { useState, useEffect } from "react";
 import FlightsDisplay from "./components/FlightsDisplay.jsx";
 import AltitudeMap from "./components/AltitudeMap.jsx";
 import Filter from "./components/Filter.jsx";
-import FetchAirports from "./scripts/FetchAirports.jsx";
+
+import { FetchAirports } from "./scripts/FetchAirports.jsx";
+import { FetchFlights } from "./scripts/FetchFlights.jsx";
 
 const AltitudeControl = () => {
     const [airports, setAirports] = useState([]);
