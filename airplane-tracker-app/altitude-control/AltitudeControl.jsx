@@ -11,6 +11,9 @@ const AltitudeControl = () => {
     useEffect(() => {
         FetchAirports().then(data => {
             setAirports(data);
+        }).catch(error => {
+            console.error('Failed to fetch airports:', error);
+            setAirports([]);
         })
     }, []);
 

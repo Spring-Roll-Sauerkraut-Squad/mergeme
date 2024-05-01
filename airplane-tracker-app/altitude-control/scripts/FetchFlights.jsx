@@ -1,20 +1,11 @@
 import axios from 'axios';
-import { URL } from '../constants'
 
 export async function FetchFlights() {
-    console.log('flights fetched');
-    const username = process.env.USERNAME_API;
-    const password = process.env.PASSWORD_API;
-    const basicAuth = 'Basic ' + btoa(username + ':' + password);
-    const url = "https://opensky-network.org/api/states/own";
-    
     try {
-        const response = await axios.get(url, {
-            headers: { Authorization: basicAuth }
-        });
+        const response = await axios.get('/api/flights');
         const rawData = response.data;
         const filteredData = rawData.states.map(state => ({
-            ica024: state[0],
+            icao24: state[0],
             callsign: state[1].trim(),
             originCountry: state[2],
             longitude: state[5],
