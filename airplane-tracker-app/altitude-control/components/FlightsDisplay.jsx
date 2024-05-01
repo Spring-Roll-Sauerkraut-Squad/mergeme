@@ -1,8 +1,9 @@
 import "./FlightsDisplay.css"
 import React, { useState, useEffect } from 'react';
 import { FetchFlights } from "../scripts/FetchFlights";
+import Filter from "./Filter";
 
-function FlightsDisplay() {
+function FlightsDisplay({ selectedFilter }) {
     const [flights, setFlights] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -16,13 +17,29 @@ function FlightsDisplay() {
         fetchData();
     }, []);
 
+    const filterFlights = (flights, filter) => {
+        switch (filter) {
+            case '> 300 ft':
+                return flights.filter(flight => parseFloat(flight.altitude) > 300);
+            case '300 ft - 150 ft':
+                return flights.filter(flight => parseFloat(flight.altitude) <= 300 && parseFloat(flight.altitude) >= 150);
+            case '< 150 ft':
+                return flights.filter(flight => parseFloat(flight.altitude) < 150);
+            case 'No Filter':
+            default:
+                return flights;
+        }
+    };
+
+    const displayedFlights = filterFlights(flights, selectedFilter);
+
     if (isLoading) return <div>Loading flights data...</div>;
-    if (!flights.length) return <div>No flight data available.</div>;
+    if (!displayedFlights.length) return <div>No flight data available.</div>;
 
     return (
         <div className="flight-data-container">
-            <h1 className="flight-data-header">All Fetched Flight Data: </h1>
-            {flights.map((flight, index) => (
+            <h1 className="flight-data-header">All Fetched Flight Data:</h1>
+            {displayedFlights.map((flight, index) => (
                 <div key={index} className="flight-data-entry">
                     <p>ICAO24: {flight.icao24}</p>
                     <p>Callsign: {flight.callsign}</p>

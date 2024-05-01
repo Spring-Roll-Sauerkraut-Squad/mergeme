@@ -3,7 +3,7 @@
     padding: 0 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;  /* Center aligns all child elements horizontally */
+    align-items: center;
     border: 1px solid black;
     background-color: grey;
     border-radius: 10px;
@@ -19,16 +19,16 @@
     border-radius: 10px;
     font-size: large;
     text-align: left;
-    margin-bottom: 10px; /* Adds space below the header */
+    margin-bottom: 10px;
 }
 
 .flight-data-entry {
-    width: 300px; /* Match width of header to align with it */
+    width: 300px;
     background-color: white;
     border-radius: 10px;
     text-align: left;
     padding: 10px;
-    margin: 10px 0; /* Adjusts vertical margin to add space between entries */
+    margin: 10px 0;
     border: 1px solid black;
     color: black;
 }

@@ -11,6 +11,7 @@ import { FetchFlights } from "./scripts/FetchFlights.jsx";
 const AltitudeControl = () => {
     const [airports, setAirports] = useState([]);
     const [warning, setWarning] = useState(null);
+    const [selectedFilter, setSelectedFilter] = useState('');
 
     useEffect(() => {
         FetchAirports().then(data => {
@@ -35,13 +36,13 @@ const AltitudeControl = () => {
         <div className="altitude-window">
             <div className="info-description" >
                 <h2> Welcome to the Altitude Supervision! </h2>
-                <button onClick={handleTestWarning} style={{margin: "10px", padding: "10px"}}>Test Warning</button>
+                <button onClick={handleTestWarning} style={{ margin: "10px", padding: "10px" }}>Test Warning</button>
             </div >
             <div className="altitude-content">
                 <div className="flight-details">
                     <h1> Active Flights: </h1>
-                    <Filter />
-                    <FlightsDisplay />
+                    <Filter setSelectedFilter={setSelectedFilter} />
+                    <FlightsDisplay selectedFilter={selectedFilter} />
                 </div>
                 <div className="flight-map">
                     <h1> | Live Map Data | </h1>

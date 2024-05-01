@@ -1,10 +1,11 @@
 import "./Filter.css"
 import React, { useState } from 'react';
 
-function Filter() {
+function Filter({ setSelectedFilter }) {
     const [selectedValue, setSelectedValue] = useState('');
 
     const handleChange = (event) => {
+        setSelectedFilter(event.target.value);
         setSelectedValue(event.target.value);
     };
 
