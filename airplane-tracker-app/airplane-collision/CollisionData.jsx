@@ -1,62 +1,68 @@
-import React from 'react';
-import Map from './Map';
+import React, { useEffect, useState } from 'react';
 import '../airplane-collision/CollisionData.css';
+import fetchWaypoints from '../../airplane-tracker-server/scripts/collision-data/fetch-collision-data.js';
+import Map from './Map'; 
 
 const CollisionData = () => {
-  
-  const airplane1 = {
-    name: 'Plane 1',
-    altitude: 30000,
-    path: [
-      { latitude: 40.7128, longitude: -74.0060 }, 
-      { latitude: 51.5074, longitude: -0.1278 }, 
-      { latitude: 35.6895, longitude: 139.6917 }, 
-    ],
-  };
+  const [airplanes, setAirplanes] = useState([]);
 
-  const airplane2 = {
-    name: 'Plane 2',
-    altitude: 35000,
-    path: [
-      { latitude: 48.8566, longitude: 2.3522 }, 
-      { latitude: 40.7128, longitude: -74.0060 }, 
-      { latitude: 34.0522, longitude: -118.2437 }, 
-    ],
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await fetchWaypoints();
+        setAirplanes(data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div className="container">
-      <Map airplanes={[airplane1, airplane2]} />
+      <Map airplanes={airplanes} />
       <div className="flight-data">
         <h2>Flight Data</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Flight</th>
-              <th>Altitude</th>
-              <th>Latitude</th>
-              <th>Longitude</th>
-            </tr>
-          </thead>
-          <tbody>
-            {airplane1.path.map((coordinate, index) => (
-              <tr key={`plane1-coordinate-${index}`}>
-                <td>{index === 0 ? airplane1.name : ''}</td>
-                <td>{index === 0 ? `${airplane1.altitude} feet` : ''}</td>
-                <td>{coordinate.latitude}</td>
-                <td>{coordinate.longitude}</td>
+        <div className="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Flight</th>
+                <th>Altitude</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
               </tr>
-            ))}
-            {airplane2.path.map((coordinate, index) => (
-              <tr key={`plane2-coordinate-${index}`}>
-                <td>{index === 0 ? airplane2.name : ''}</td>
-                <td>{index === 0 ? `${airplane2.altitude} feet` : ''}</td>
-                <td>{coordinate.latitude}</td>
-                <td>{coordinate.longitude}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {airplanes.map((airplane, index) => (
+                <tr key={index}>
+                  <td>{airplane.flight.callsign}</td>
+                  <td className="scrollable-list">
+                    <ul>
+                      {airplane.waypoints.path.map((waypoint, idx) => (
+                        <li key={idx}>{waypoint.altitude}</li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="scrollable-list">
+                    <ul>
+                      {airplane.waypoints.path.map((waypoint, idx) => (
+                        <li key={idx}>{waypoint.latitude}</li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="scrollable-list">
+                    <ul>
+                      {airplane.waypoints.path.map((waypoint, idx) => (
+                        <li key={idx}>{waypoint.longitude}</li>
+                      ))}
+                    </ul>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

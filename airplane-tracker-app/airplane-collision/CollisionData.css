@@ -1,4 +1,3 @@
-
 .container {
   position: relative;
 }
@@ -7,15 +6,28 @@
   position: absolute;
   top: 0;
   right: 0;
-  z-index: 2; 
+  z-index: 1;
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 50px;
   border-radius: 5px;
+  padding: 90px;
+  width: 300px;
+  transform: translateY(0%);
 }
 
+.flight-data ul {
+  max-height: 200px;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.table-wrapper {
+  max-height: 400px;
+  overflow-y: auto;
+}
 
 .flight-data table {
-  width: 100%; 
+  width: 100%;
   border-collapse: collapse;
 }
 
@@ -24,21 +36,18 @@
   color: #030000;
 }
 
-
-.flight-data th {
-  border: 1px solid #030000; 
+.flight-data th,
+.flight-data td {
+  border: 1px solid #030000;
   padding: 10px;
   text-align: left;
   color: #030000;
 }
 
-.flight-data td {
-  border: 1px solid #040000; 
-  padding: 8px;
-  text-align: center;
-  color: #030000;
-}
-
-.leaflet-container {
-  z-index: 1; 
+#map {
+  max-height: 1000px;
+  min-height: 550px;
+  min-width: 1000px;
+  z-index: 0;
+  overflow-y: auto;
 }
