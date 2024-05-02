@@ -16,7 +16,7 @@ const options = {
 };
 
 //replace uri
-mongoose.connect(mongoURI, options)
+mongoose.connect(process.env.MONGO_URI, options)
     .then(() => console.log('MongoDB connected'))
     .catch(err => console.error('MongoDB connection error:', err));
 app.use(cors());

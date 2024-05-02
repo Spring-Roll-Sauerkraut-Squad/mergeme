@@ -23,7 +23,7 @@ const LiveMap = ({ airports }) => {
     });
 
     airports.forEach(airport => {
-      L.marker([airport.location[0].latitude, airport.location[0].longitude], { icon: airportMarker })
+      L.marker([airport.latitude_deg, airport.longitude_deg], { icon: airportMarker })
         .addTo(map)
         .bindPopup(`${airport.name}`);
     });
