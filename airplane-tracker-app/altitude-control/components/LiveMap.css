@@ -1,9 +1,8 @@
-.altitude-map {
+#live-map {
     width: 900px;
     height: 470px;
     margin: 0 auto;
     border: 2px solid black;
     border-radius: 10px 10px 0px 0px;
     overflow: hidden;
-    display: block;
 }

@@ -6,11 +6,15 @@
 }
 
 .info-description {
+    display: flex;
     color: black;
     font-size: large;
     text-decoration: underline;
-    text-shadow: 5px 0 0 0;
-    padding: 0 5px 5px 5px;
+}
+
+.warning-test-button {
+    margin: 20px;
+    text-decoration: none;
 }
 
 .altitude-content {
@@ -19,38 +23,54 @@
     justify-content: center;
 }
 
-.flight-details {
+.details {
     font-size: small;
-    display: flex;
     flex-direction: column;
     align-items: center;
-    flex: 1;
     background-color: rgb(177, 177, 177);
     border: 2px solid black;
-    border-radius: 10px 0px 0px 10px;
-    padding: 0 50px 50px 50px;
+    border-radius: 10px 0 0 10px;
+    padding: 0 50px 50px;
     margin: 3px;
     overflow-y: auto;
     max-height: 550px;
-    
     min-height: 550px;
+}
+
+.flight-details {
+    flex: 1;
     min-width: 500px;
 }
 
-.flight-map {
-    font-size: small;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+.map-details {
     flex: 2;
-    background-color: rgb(177, 177, 177);
-    border: 2px solid black;
-    border-radius: 10px 0px 0px 10px;
-    padding: 0 50px 50px 50px;
-    margin: 3px;
-    overflow-y: auto;
-    max-height: 550px;
-    
-    min-height: 550px;
-    min-width: 1000px;
+}
+
+.tab-selector {
+    display: flex;
+    border-bottom: 2px solid black;
+}
+
+#tab-button {
+    flex: 1;
+    font-size: large;
+    border-left: 2px solid black;
+    border-right: 2px solid black;
+    border-radius: 0%;
+    font-weight: 500;
+    cursor: pointer;
+    color: white;
+    transition: background-color 0.25s, color 0.25s;
+    margin-left: 0;
+}
+
+.tab-selector button:hover,
+.tab-selector button.active {
+    background-color: #1178ff;
+}
+
+.map-title {
+    font-size: xx-large;
+    color: white;
+    text-align: center;
 }
