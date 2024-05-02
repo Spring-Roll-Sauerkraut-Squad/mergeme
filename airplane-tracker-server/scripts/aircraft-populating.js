@@ -5,7 +5,7 @@ const path = require('path');
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 const mongoURI = process.env.MONGO_URI;
-const csvAirport = process.env.CSV_AIRPORT_DATA_PATH;
+const csvAircraft = process.env.CSV_AIRCRAFT_DATA_PATH;
 
 const options = {
     useNewUrlParser: true,
@@ -15,31 +15,12 @@ const options = {
 
 mongoose.connect(mongoURI, options);
 
-const AirportModel = mongoose.model('Airport', new mongoose.Schema({
-    id: Number,
-    ident: String,
-    type: String,
-    name: String,
-    latitude_deg: Number,
-    longitude_deg: Number,
-    elevation_ft: Number,
-    continent: String,
-    iso_country: String,
-    iso_region: String,
-    municipality: String,
-    scheduled_service: String,
-    gps_code: String,
-    iata_code: String,
-    local_code: String,
-    home_link: String,
-    wikipedia_link: String,
-    keywords: String
-}));
+const AircraftModel = mongoose.model('Aircraft', new mongoose.Schema({}, { strict: false }));
 const batchSize = 1000;
 let docs = [];
 let insertPromise = null;
 
-const readStream = fs.createReadStream(csvAirport).pipe(csvParser());
+const readStream = fs.createReadStream(csvAircraft).pipe(csvParser());
 
 readStream.on('data', async (row) => {
     docs.push(row);
@@ -48,7 +29,7 @@ readStream.on('data', async (row) => {
         if (insertPromise) {
             await insertPromise;
         }
-        insertPromise = AirportModel.insertMany(docs.map(doc => new AirportModel(doc)));
+        insertPromise = AircraftModel.insertMany(docs.map(doc => new AircraftModel(doc)));
         docs = [];
         readStream.resume();
     }
@@ -59,7 +40,7 @@ readStream.on('end', async () => {
         await insertPromise;
     }
     if (docs.length > 0) {
-        await AirportModel.insertMany(docs.map(doc => new AirportModel(doc)));
+        await AircraftModel.insertMany(docs.map(doc => new AircraftModel(doc)));
     }
     if (insertPromise) {
         await insertPromise;

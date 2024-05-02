@@ -25,7 +25,7 @@ const extractWaypoints = async () => {
       WaypointModel = mongoose.model('Aircraft-waypoint', new mongoose.Schema({}, { strict: false }));
     }
 
-    const waypoints = await WaypointModel.find({}).limit(3);
+    const waypoints = await WaypointModel.find({}).limit(50);
 
     return waypoints;
   } catch (error) {
