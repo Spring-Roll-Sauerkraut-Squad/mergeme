@@ -4,9 +4,9 @@ import cors from 'cors';
 import 'dotenv/config'
 
 const app = express();
-const api_port = process.env.API_PORT || 3000;
+const flights_server_port = process.env.FLIGHTS_API_PORT || 3000;
 
-const api_url = 'https://opensky-network.org/api/states/own';
+const flights_api_url = 'https://opensky-network.org/api/states/own';
 const opensky_username = process.env.OPENSKY_USERNAME;
 const opensky_password = process.env.OPENSKY_PASSWORD;
 
@@ -18,7 +18,7 @@ app.get('/api/flights', async (req, res) => {
 
     const auth = Buffer.from(`${username}:${password}`).toString('base64');
     try {
-        const response = await axios.get(api_url, {
+        const response = await axios.get(flights_api_url, {
             headers: { Authorization: `Basic ${auth}` }
         });
         res.json(response.data);
@@ -29,4 +29,4 @@ app.get('/api/flights', async (req, res) => {
     }
 });
 
-app.listen(api_port, () => console.log(`Server running on port ${api_port}/api/flights`));
+app.listen(flights_server_port, () => console.log(`Server running on port ${flights_server_port}/api/flights`));

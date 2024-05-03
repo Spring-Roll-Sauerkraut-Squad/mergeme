@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-const LiveMap = ({ airports }) => {
+const LiveMap = ({ airports, airspaces }) => {
   useEffect(() => {
     const map = L.map('live-map').setView([49.4, 8.7], 5);
 
@@ -28,10 +28,25 @@ const LiveMap = ({ airports }) => {
         .bindPopup(`${airport.name}`);
     });
 
+    //Blue Layers - Airspaces
+    if (airspaces) {
+      const airspaceLayer = L.geoJSON(airspaces, {
+        style: () => ({
+          color: '#0000ff',
+          fillOpacity: 0.1,
+          weight: 2
+        }),
+        onEachFeature: (feature, layer) => {
+          const props = feature.properties;
+          layer.bindPopup(`Name: ${props.name}<br/>Floor: ${props.FLOOR}<br/>Ceiling: ${props.CEILING}`);
+        }
+      }).addTo(map);
+    }
+
     return () => {
       map.remove();
     };
-  }, [airports]);
+  }, [airports, airspaces]);
 
   return <div id="live-map"></div>;
 };
