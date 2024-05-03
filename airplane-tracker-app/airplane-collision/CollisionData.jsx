@@ -26,6 +26,14 @@ const CollisionData = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const calculatePotentialCollisions = () => {
+      // Collision prediction logic here for actual use
+    };
+    
+    calculatePotentialCollisions();
+  }, [airplanes, selectedWaypointIndex1, selectedWaypointIndex2]);
+
   const handleWaypointChange = (flightNumber, increment) => {
     const setWaypointIndex = flightNumber === 1 ? setSelectedWaypointIndex1 : setSelectedWaypointIndex2;
     setWaypointIndex(prevIndex => Math.max(0, Math.min(prevIndex + increment, 
@@ -87,7 +95,13 @@ const CollisionData = () => {
 
   return (
     <div className="container">
-      <Map airplanes={airplanes} />
+      <Map
+        airplanes={airplanes}
+        selectedFlight1={selectedFlight1}
+        selectedFlight2={selectedFlight2}
+        selectedWaypointIndex1={selectedWaypointIndex1}
+        selectedWaypointIndex2={selectedWaypointIndex2}
+      />
       <div className="flight-data">
         <h2>Flight Data</h2>
         {renderFlightTable(selectedFlight1, airplanes.find(({ flight }) => flight.callsign === selectedFlight1), selectedWaypointIndex1, 1)}
