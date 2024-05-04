@@ -23,6 +23,13 @@ const LiveMap = ({ airports, airspaces, flights }) => {
       shadowSize: [41, 41]
     });
 
+    //Add Airport Marker to map
+    airports.forEach(airport => {
+      L.marker([airport.latitude_deg, airport.longitude_deg], { icon: airportMarker })
+        .addTo(map)
+        .bindPopup(`${airport.name}`);
+    });
+
     //Flight Marker - Active Flights
     const flightIcon = L.icon({
       iconUrl: planeIcon,
@@ -30,25 +37,18 @@ const LiveMap = ({ airports, airspaces, flights }) => {
       iconAnchor: [15, 15],
     });
 
-    //Add Airport Marker
-    airports.forEach(airport => {
-      L.marker([airport.latitude_deg, airport.longitude_deg], { icon: airportMarker })
-        .addTo(map)
-        .bindPopup(`${airport.name}`);
-    });
-
-    //Add Flight Marker
+    //Add Flight Marker to map
     let flightMarkers = [];
     flights.forEach(flight => {
       const marker = L.marker([flight.latitude, flight.longitude], { icon: flightIcon })
         .addTo(map)
-        .bindPopup(`Callsign: ${flight.callsign}`);
+        .bindPopup(`Callsign: ${flight.callsign}<br>Altitude: ${flight.altitude} ft`);
       flightMarkers.push(marker);
     });
 
     //Add Blue Airspace Layers
     if (airspaces) {
-      const airspaceLayer = L.geoJSON(airspaces, {
+      L.geoJSON(airspaces, {
         style: () => ({
           color: '#0000ff',
           fillOpacity: 0.1,
@@ -66,7 +66,6 @@ const LiveMap = ({ airports, airspaces, flights }) => {
       map.remove();
     };
   }, [airports, airspaces, flights]);
-
   return <div id="live-map"></div>;
 };
 

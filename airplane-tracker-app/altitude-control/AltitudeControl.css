@@ -30,7 +30,7 @@
     background-color: rgb(240, 240, 240);
     border: 1px solid black;
     border-radius: 10px;
-    width: 400px;
+    width: 420px;
     margin: 10px;
 }
 
@@ -44,8 +44,8 @@
     padding: 0 50px 50px;
     margin: 3px;
     overflow-y: auto;
-    max-height: 550px;
-    min-height: 550px;
+    max-height: 560px;
+    min-height: 600px;
 }
 
 .flight-details {

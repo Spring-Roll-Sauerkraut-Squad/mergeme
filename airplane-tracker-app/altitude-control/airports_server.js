@@ -6,9 +6,7 @@ import 'dotenv/config'
 
 const app = express();
 const airport_server_port = process.env.AIRPORT_MONGO_PORT || 4000;
-
 const mongoURI = process.env.MONGO_URI;
-
 const options = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -21,5 +19,4 @@ mongoose.connect(mongoURI, options)
 app.use(cors());
 app.use(express.json());
 app.use('/api/airports', AirportRoutes);
-
 app.listen(airport_server_port, () => console.log(`Server running on http://localhost:${airport_server_port}/api/airports`));

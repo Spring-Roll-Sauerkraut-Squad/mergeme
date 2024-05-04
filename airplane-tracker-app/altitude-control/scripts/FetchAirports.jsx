@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function FetchAirports() {
+const FetchAirports = async () => {
     try {
         const response = await axios.get('http://localhost:4000/api/airports');
         return response.data;
@@ -8,4 +8,6 @@ export async function FetchAirports() {
         console.error('Error fetching airports:', error);
         return [];
     }
-}
+};
+
+export default FetchAirports;

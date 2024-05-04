@@ -12,7 +12,6 @@ const Airport = mongoose.model('Airport', airportSchema);
 
 export default Airport;
 
-
 /*
 const airportSchema = new mongoose.Schema({
     name: { type: String, required: true },

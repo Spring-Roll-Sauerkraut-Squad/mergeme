@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export async function FetchFlights() {
+const FetchFlights = async () => {
     try {
         const response = await axios.get('http://localhost:3000/api/flights');
         const rawData = response.data;
@@ -10,7 +10,7 @@ export async function FetchFlights() {
             return [];
         }
 
-        const filteredData = rawData.states.map(state => ({
+        return rawData.states.map(state => ({
             icao24: state[0],
             callsign: state[1].trim(),
             originCountry: state[2],
@@ -25,10 +25,10 @@ export async function FetchFlights() {
             spi: state[14],
             positionSource: state[15]
         }));
-
-        return filteredData;
     } catch (error) {
         console.error('Error fetching flights:', error);
         return [];
     }
-}
+};
+
+export default FetchFlights;
