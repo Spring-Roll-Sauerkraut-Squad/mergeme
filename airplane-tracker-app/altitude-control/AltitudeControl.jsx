@@ -40,15 +40,17 @@ const AltitudeControl = () => {
             .catch(error => {
                 console.error('Failed to fetch airspace data:', error);
             });
+        refreshFlights();
+    }, []);
+
+    const refreshFlights = () => {
         FetchFlights()
-            .then(data => {
-                setFlights(data);
-            })
+            .then(data => { setFlights(data) })
             .catch(error => {
                 console.error('Failed to fetch flights:', error);
                 setFlights([]);
             });
-    }, []);
+    };
 
     //Testing Only
     const handleTestWarning = () => {
@@ -69,6 +71,7 @@ const AltitudeControl = () => {
             <div className="altitude-content">
                 <div className="details">
                     <h1> Active Flights: </h1>
+                    <button className="refresh-button" onClick={refreshFlights}>Refresh Flights and Map</button>
                     <Filter setSelectedFilter={setSelectedFilter} />
                     <FlightsDisplay selectedFilter={selectedFilter} />
                 </div>
@@ -78,7 +81,7 @@ const AltitudeControl = () => {
                         {activeTab === 'live-map' &&
                             <div>
                                 <h1 className="map-title"> Live Data Map </h1>
-                                <LiveMap airports={airports} airspaces={airspaces} flights={flights}/>
+                                <LiveMap airports={airports} airspaces={airspaces} flights={flights} />
                             </div>
                         }
                         {activeTab === 'altitude-map' &&

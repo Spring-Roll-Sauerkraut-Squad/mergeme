@@ -6,7 +6,7 @@ import 'dotenv/config'
 const app = express();
 const flights_server_port = process.env.FLIGHTS_API_PORT || 3000;
 
-const flights_api_url = 'https://opensky-network.org/api/states/own';
+const flights_api_url = 'https://opensky-network.org/api/states/all?lamin=47.2701&lomin=5.8663&lamax=55.0583&lomax=15.0419';
 const opensky_username = process.env.OPENSKY_USERNAME;
 const opensky_password = process.env.OPENSKY_PASSWORD;
 
@@ -22,7 +22,6 @@ app.get('/api/flights', async (req, res) => {
             headers: { Authorization: `Basic ${auth}` }
         });
         res.json(response.data);
-        console.log('test');
     } catch (error) {
         console.error('Error fetching data from OpenSky:', error);
         res.status(500).send('Failed to fetch data');

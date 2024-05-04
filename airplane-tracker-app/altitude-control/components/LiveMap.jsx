@@ -38,12 +38,12 @@ const LiveMap = ({ airports, airspaces, flights }) => {
     });
 
     //Add Flight Marker
+    let flightMarkers = [];
     flights.forEach(flight => {
-      if (flight.latitude && flight.longitude) {
-        L.marker([flight.latitude, flight.longitude], { icon: flightIcon })
-          .addTo(map)
-          .bindPopup(`Callsign: ${flight.callsign}<br>Altitude: ${flight.altitude} ft`);
-      }
+      const marker = L.marker([flight.latitude, flight.longitude], { icon: flightIcon })
+        .addTo(map)
+        .bindPopup(`Callsign: ${flight.callsign}`);
+      flightMarkers.push(marker);
     });
 
     //Add Blue Airspace Layers
@@ -61,8 +61,8 @@ const LiveMap = ({ airports, airspaces, flights }) => {
       }).addTo(map);
     }
 
-
     return () => {
+      flightMarkers.forEach(marker => map.removeLayer(marker));
       map.remove();
     };
   }, [airports, airspaces, flights]);
