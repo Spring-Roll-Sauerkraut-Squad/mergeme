@@ -16,6 +16,7 @@ import { FetchFlights } from "./scripts/FetchFlights.jsx";
 const AltitudeControl = () => {
     const [airports, setAirports] = useState([]);
     const [airspaces, setAirspaces] = useState(null);
+    const [flights, setFlights] = useState([]);
 
     const [warning, setWarning] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState('');
@@ -38,6 +39,14 @@ const AltitudeControl = () => {
             })
             .catch(error => {
                 console.error('Failed to fetch airspace data:', error);
+            });
+        FetchFlights()
+            .then(data => {
+                setFlights(data);
+            })
+            .catch(error => {
+                console.error('Failed to fetch flights:', error);
+                setFlights([]);
             });
     }, []);
 
@@ -69,7 +78,7 @@ const AltitudeControl = () => {
                         {activeTab === 'live-map' &&
                             <div>
                                 <h1 className="map-title"> Live Data Map </h1>
-                                <LiveMap airports={airports} airspaces={airspaces} />
+                                <LiveMap airports={airports} airspaces={airspaces} flights={flights}/>
                             </div>
                         }
                         {activeTab === 'altitude-map' &&
