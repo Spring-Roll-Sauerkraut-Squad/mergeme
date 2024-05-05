@@ -24,4 +24,4 @@ app.get('/api/flights', async (req, res) => {
         res.status(500).send('Failed to fetch data');
     }
 });
-app.listen(flights_server_port, () => console.log(`Server running on port ${flights_server_port}/api/flights`));
+app.listen(flights_server_port, () => console.log(`Server running on http://localhost:${flights_server_port}/api/flights`));

@@ -10,7 +10,7 @@ const LiveMap = ({ airports, airspaces, flights }) => {
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-      maxZoom: 19,
+      maxZoom: 12,
     }).addTo(map);
 
     //Red Marker - Static Airports

@@ -44,8 +44,8 @@
     padding: 0 50px 50px;
     margin: 3px;
     overflow-y: auto;
-    max-height: 560px;
-    min-height: 600px;
+    max-height: 500px;
+    min-height: 550px;
 }
 
 .flight-details {
