@@ -34,19 +34,65 @@ const Map = ({
       L.polyline(latlngs, { color }).addTo(map);
     };
 
+    const calculateDistance = (lat1, lon1, alt1, lat2, lon2, alt2) => {
+      const R = 6371e3; // Earth radius in meters
+      const φ1 = lat1 * Math.PI / 180; // φ, λ in radians
+      const φ2 = lat2 * Math.PI / 180;
+      const Δφ = (lat2 - lat1) * Math.PI / 180;
+      const Δλ = (lon2 - lon1) * Math.PI / 180;
+      const Δh = (alt2 - alt1);
+      const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2) +
+              Math.cos(φ1) * Math.cos(φ2) *
+              Math.sin(Δλ / 2) * Math.sin(Δλ / 2);
+      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)); //Haversine Formula
+      const d = Math.sqrt(c * c + Δh * Δh);
+      return R * d; 
+    };
+    
+    
     const addMarkers = (flight, color) => {
-      const flightMarkers = flight.waypoints.path.map((waypoint) => {
+      const flightMarkers = flight.waypoints.path.map((waypoint, index) => {
         const marker = L.circleMarker([waypoint.latitude, waypoint.longitude], { color, radius: 5 }).addTo(map);
-        const isFirstFlight = selectedFlight1 === airplanes[0]?.flight.callsign;
-        const isSecondFlight = selectedFlight2 === airplanes[1]?.flight.callsign || selectedFlight2 === airplanes[2]?.flight.callsign;
-        const message = isFirstFlight && isSecondFlight
-          ? `Possible collision predicted!<br/> Air Traffic Control Notified!`
-          : `No collision predicted!`;
+        const otherFlight = selectedFlight1 === flight.flight.callsign ? selectedFlight2 : selectedFlight1;
+        const otherFlightData = airplanes.find(({ flight }) => flight.callsign === otherFlight);
+        if (!otherFlightData) return marker;
+    
+        let shortestDistance = Infinity;
+        flight.waypoints.path.forEach((waypoint1) => {
+          otherFlightData.waypoints.path.forEach((waypoint2) => {
+            const distance = calculateDistance(waypoint1.latitude, waypoint1.longitude, waypoint1.altitude, waypoint2.latitude, waypoint2.longitude, waypoint2.altitude);
+            
+            if (distance < shortestDistance) {
+              shortestDistance = distance;
+            }
+          });
+        });
+    
+        let message;
+        if (shortestDistance <= 2000) {
+          if (selectedFlight1 === selectedFlight2) {
+            message = 'No collision predicted.';
+          } else {
+            message = selectedFlight1 === flight.flight.callsign
+              ? `Possible collision with ${selectedFlight2} predicted.<br/> Air Traffic Control Notified.<br/>Closest distance: ${shortestDistance.toFixed(2)} meters`
+              : `Possible collision with ${selectedFlight1} predicted.<br/> Air Traffic Control Notified.<br/>Closest distance: ${shortestDistance.toFixed(2)} meters`;
+          }
+        } else {
+          message = 'No collision predicted.';
+        }
+    
         marker.bindPopup(`Flight: ${flight.flight.callsign}<br/>${message}`);
+        if (selectedFlight1 === flight.flight.callsign && index === selectedWaypointIndex1) {
+          marker.openPopup();
+        }
         return marker;
       });
       markersRef.current.push(...flightMarkers);
     };
+    
+    
+    
+    
     
     const addPlaneIcons = (flight, svgImage, waypointIndex) => {
       const waypoint = flight.waypoints.path[waypointIndex];
@@ -57,13 +103,17 @@ const Map = ({
       });
       const marker = L.marker([waypoint.latitude, waypoint.longitude], { icon: planeIcon }).addTo(map);
       markersRef.current.push(marker);
+      return marker; 
     };
 
     const selectedFlightData1 = airplanes.find(({ flight }) => flight.callsign === selectedFlight1);
     if (selectedFlightData1) {
       drawFlightPath(selectedFlightData1, 'blue');
       addMarkers(selectedFlightData1, 'blue');
-      addPlaneIcons(selectedFlightData1, Plane1SVG, selectedWaypointIndex1);
+      const planeMarker1 = addPlaneIcons(selectedFlightData1, Plane1SVG, selectedWaypointIndex1);
+      if (planeMarker1) {
+        map.setView(planeMarker1.getLatLng(), zoomLevel);
+      }
     }
 
     const selectedFlightData2 = airplanes.find(({ flight }) => flight.callsign === selectedFlight2);

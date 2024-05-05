@@ -1,3 +1,4 @@
+//To fetch flights and its waypoints from MongoDB
 const fetchWaypoints = async () => {
   try {
     if (typeof fetch !== 'undefined') {

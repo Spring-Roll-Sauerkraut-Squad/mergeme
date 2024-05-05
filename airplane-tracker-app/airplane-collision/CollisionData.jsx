@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../airplane-collision/CollisionData.css';
-import fetchWaypoints from '../../airplane-tracker-server/scripts/collision-data/fetch-collision-data.js';
-import Map from './Map'; 
+import fetchWaypoints from '../../airplane-tracker-server/scripts/collision-data/fetch-waypoint-data.js';
+import Map from './MapCollision.jsx'; 
 
 const CollisionData = () => {
   const [airplanes, setAirplanes] = useState([]);
@@ -26,13 +26,6 @@ const CollisionData = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const calculatePotentialCollisions = () => {
-      // Collision prediction logic here for actual use
-    };
-    
-    calculatePotentialCollisions();
-  }, [airplanes, selectedWaypointIndex1, selectedWaypointIndex2]);
 
   const handleWaypointChange = (flightNumber, increment) => {
     const setWaypointIndex = flightNumber === 1 ? setSelectedWaypointIndex1 : setSelectedWaypointIndex2;

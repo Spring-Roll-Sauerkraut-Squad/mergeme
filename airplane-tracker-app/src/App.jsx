@@ -16,7 +16,7 @@ function App() {
   };
 
   const handleTitleClick = () => {
-    setActiveButton(null); // Reset activeButton state when title is clicked
+    setActiveButton(null); 
   };
 
   return (
