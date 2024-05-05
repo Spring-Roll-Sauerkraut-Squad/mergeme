@@ -1,4 +1,4 @@
-import * as turf from '@turf/turf';
+import * as turf from '@turf/turf'
 
 const CheckAltitudes = (flights, airspaces) => {
     const warnings = [];
@@ -7,21 +7,25 @@ const CheckAltitudes = (flights, airspaces) => {
         const point = turf.point([flight.longitude, flight.latitude]);
 
         airspaces.forEach(airspace => {
-            const polygon = turf.polygon([airspace.geometry.coordinates]);
-            if (turf.booleanPointInPolygon(point, polygon) &&
-                flight.altitude >= airspace.floor && flight.altitude <= airspace.ceiling) {
-                isCompliant = true;
+            // Get the first and last coordinate in the LinearRing
+            const coordinates = airspace.geometry.coordinates[0];
+            const firstCoord = coordinates[0];
+            const lastCoord = coordinates[coordinates.length - 1];
+
+            // Check if the first and last coordinates are the same
+            if (coordinates.length >= 4 && firstCoord[0] === lastCoord[0] && firstCoord[1] === lastCoord[1]) {
+                const polygon = turf.polygon([coordinates]);
+                if (turf.booleanPointInPolygon(point, polygon) &&
+                    flight.altitude >= airspace.floor && flight.altitude <= airspace.ceiling) {
+                    isCompliant = true;
+                }
             }
         });
 
         if (!isCompliant) {
-            warnings.push(`Flight ${flight.callsign || "[no callsign provided]"} at altitude ${flight.altitude} is out of bounds at location ${flight.longitude}, ${flight.latitude}`);
+            warnings.push(`Flight ${flight.callsign} at altitude ${flight.altitude} is out of bounds at location ${flight.longitude}, ${flight.latitude}`);
         }
     });
-    
-    if (warnings.length) {
-        return [];
-    }
     return warnings;
 };
 

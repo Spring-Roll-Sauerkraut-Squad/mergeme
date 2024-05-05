@@ -2,13 +2,12 @@ import './Warning.css';
 import React from 'react';
 
 const Warning = ({ warnings, onClose }) => {
-    console.log(warnings);
     return (
         <div className="warning-overlay">
             <div className="popup">
                 <div className="spacer-top">
                     <div className="warning-symbol"></div>
-                    <p className='warning-header'> Altitude Warning!</p>
+                    <p className='warning-header'>Altitude Warning!</p>
                     <div className="warning-symbol"></div>
                 </div>
                 <div className='message-box'>
@@ -16,8 +15,7 @@ const Warning = ({ warnings, onClose }) => {
                     <div>
                         {warnings.map((warning, index) => (
                             <div key={index}>
-                                <p>Flight Callsign: {warning.callsign} </p>
-                                <p>Location: {warning.location} | Altitude: {warning.altitude} ft</p>
+                                <p>{warning}</p>
                                 <p> - - - - - </p>
                             </div>
                         ))}

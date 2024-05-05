@@ -16,6 +16,7 @@ const AltitudeControl = () => {
     const [flights, setFlights] = useState([]);
     const [filteredFlights, setFilteredFlights] = useState([]);
     const [warnings, setWarnings] = useState([]);
+    const [showWarnings, setShowWarnings] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('');
     const [activeTab, setActiveTab] = useState('live-map');
 
@@ -29,7 +30,6 @@ const AltitudeControl = () => {
 
     const fetchInitialData = () => {
         fetchAirports();
-        fetchAirspaces();
         fetchAndFilterFlights();
     };
 
@@ -42,26 +42,25 @@ const AltitudeControl = () => {
             });
     };
 
-    const fetchAirspaces = () => {
-        FetchAirspaces()
-            .then(setAirspaces)
-            .catch(() => {
-                console.error('Failed to fetch airspace data');
-            });
-    };
-
     const fetchAndFilterFlights = () => {
-        FetchFlights()
-            .then(data => {
-                setFlights(data);
-                const filtered = applyFlightFilter(data, selectedFilter);
+        Promise.all([FetchAirspaces(), FetchFlights()])
+            .then(([airspacesData, flightsData]) => {
+                setAirspaces(airspacesData);
+                setFlights(flightsData);
+    
+                const filtered = applyFlightFilter(flightsData, selectedFilter);
                 setFilteredFlights(filtered);
-                console.log(airspaces);
-                const newWarnings = CheckAltitudes(filtered, airspaces);
-                setWarnings(newWarnings);
+    
+                const activeWarnings = CheckAltitudes(filtered, airspacesData);
+                setWarnings(activeWarnings);
+                setShowWarnings(true);
             })
-            .catch(() => {
-                console.error('Failed to fetch flight data');
+            .catch(error => {
+                console.error('Failed to fetch flights or airspaces:', error);
+                setAirspaces([]);
+                setFlights([]);
+                setWarnings([]);
+                setShowWarnings(false);
             });
     };
 
@@ -78,24 +77,20 @@ const AltitudeControl = () => {
         }
     };
 
-    //const handleTestWarning = () => setWarning('Location: xx, xx || Altitude: xx');
-    //const handleCloseWarning = () => setWarning(null);
-
     return (
         <div className="altitude-window">
             <div className="info-description">
                 <h2>Welcome to the Altitude Supervision!</h2>
-                <button className="warning-test-button" onClick={() => console.log(warnings)}>Test Warning Message</button>
             </div>
             <div className="altitude-content">
                 <div className="details">
-                    <h1>Active Flights:</h1>
-                    <button className="refresh-button" onClick={fetchAndFilterFlights}>Refresh Flights and Map</button>
+                <h1>Active Flights:</h1>
+                    <button className="refresh-button" onClick={fetchAndFilterFlights}>Refresh Flights and Map & Show Warnings</button>
                     <Filter setSelectedFilter={setSelectedFilter} />
                     <FlightsDisplay flights={filteredFlights} />
-                    {warnings?.map((message, index) => (
-                        <Warning warnings={message} key={index} onClose={() => setWarnings([])} />
-                    ))}
+                    {warnings && warnings.length > 0 && showWarnings && (
+                        <Warning warnings={warnings} onClose={() => { setWarnings([]); setShowWarnings(false); }} />
+                    )}
                 </div>
                 <div className="details">
                     <div className="tab-content">

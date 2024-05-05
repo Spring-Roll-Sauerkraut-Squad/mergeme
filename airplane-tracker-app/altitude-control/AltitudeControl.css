@@ -12,11 +12,6 @@
     text-decoration: underline;
 }
 
-/* TESTING ONLY */
-.warning-test-button {
-    margin: 20px;
-    text-decoration: none;
-}
 
 .altitude-content {
     display: flex;
@@ -27,7 +22,7 @@
 .refresh-button {
     color: black;
     font-size: large;
-    background-color: rgb(240, 240, 240);
+    background-color: rgb(255, 40, 40);
     border: 1px solid black;
     border-radius: 10px;
     width: 420px;
