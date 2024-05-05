@@ -1,0 +1,81 @@
+// Create Flight Nodes
+LOAD CSV WITH HEADERS FROM 'file:///flights.csv' AS row
+WITH row 
+WHERE 
+  (row.day IS NOT NULL AND row.day <> '') AND
+  (COALESCE(row.origin, '') <> '' OR COALESCE(row.destination, '') <> '')
+CREATE (:Flight {
+    flight_id: row.uuid,
+    aircraft_icao24: row.icao24,
+    flight_date: row.day,
+    created_at: datetime()
+});
+
+// Create Airport Nodes
+LOAD CSV WITH HEADERS FROM 'file:///airports.csv' AS row
+WITH row
+WHERE COALESCE(row.ident, '') <> ''
+CREATE (:Airport {
+    airport_code: row.ident,
+    airport_name: row.name,
+    latitude: row.latitude_deg,
+    longitude: row.longitude_deg,
+    created_at: datetime()
+});
+
+
+// Create essential indexes
+CREATE INDEX idx_airport_code FOR (a:Airport) ON (n.airport_code)
+CREATE INDEX idx_flight_id FOR (f:Flight) ON (f.flight_id)
+
+// Create DEPARTS_FROM relationships
+LOAD CSV WITH HEADERS FROM 'file:///flights.csv' AS row
+WITH row 
+WHERE
+(row.day IS NOT NULL AND row.day <> '') AND
+  (COALESCE(row.origin, '') <> '' OR COALESCE(row.destination, '') <> '')
+MATCH (flight:Flight {flight_id: row.uuid})
+MATCH (airport:Airport {airport_code: row.origin})
+CREATE (flight)-[:DEPARTS_FROM {created_at: datetime()}]->(airport);
+
+ 
+ // Create ARRIVES_AT relationships
+LOAD CSV WITH HEADERS FROM 'file:///flights.csv' AS row
+WITH row
+WHERE(row.day IS NOT NULL AND row.day <> '') AND
+  (COALESCE(row.origin, '') <> '' OR COALESCE(row.destination, '') <> '')
+MATCH (flight:Flight {flight_id: row.uuid})
+MATCH (airport:Airport {airport_code: row.destination})
+CREATE (flight)-[:ARRIVES_AT {created_at: datetime()}]->(airport);
+
+ 
+// Query top 10 airports within a specific time range
+MATCH (flight:Flight)-[:DEPARTS_FROM]->(airport:Airport)
+WHERE flight.flight_date >= '2019-01-01' AND flight.flight_date <= '2019-01-31'
+WITH airport, COUNT(flight) AS departuresCount
+
+MATCH (flight:Flight)-[:ARRIVES_AT]->(airport)
+WHERE flight.flight_date >= '2019-01-01' AND flight.flight_date <= '2019-01-31'
+WITH airport, departuresCount, COUNT(flight) AS arrivalsCount
+
+WITH airport, departuresCount, arrivalsCount, departuresCount + arrivalsCount AS totalFlights
+
+RETURN airport.airport_code AS airportCode, totalFlights
+ORDER BY totalFlights DESC
+LIMIT 10
+
+// Query top 10 routes within a specific time range
+MATCH (originAirport:Airport)<-[:DEPARTS_FROM]-(flight:Flight)-[:ARRIVES_AT]->(destinationAirport:Airport)
+WHERE flight.flight_date >= '2019-01-01' AND flight.flight_date <= '2019-01-31'
+WITH originAirport, destinationAirport, COUNT(flight) AS flightCount
+RETURN originAirport.airport_code AS originAirportCode, 
+       destinationAirport.airport_code AS destinationAirportCode, 
+       flightCount
+ORDER BY flightCount DESC
+LIMIT 10
+
+// Query all positions within a specific time range
+MATCH (flight:Flight)-[:DEPARTS_FROM|ARRIVES_AT]->(airport:Airport)
+WHERE flight.flight_date >= '2019-01-01' AND flight.flight_date <= '2019-01-31'
+RETURN airport.latitude AS latitude, airport.longitude AS longitude, COUNT(*) AS count
+ORDER BY count(*) DESC
