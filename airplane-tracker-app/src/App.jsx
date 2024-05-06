@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import CollisionData from '../airplane-collision/CollisionData';
 import AltitudeControl from '../altitude-control/AltitudeControl';
+import HeatMap from '../heatmap/HeatMap';
 
 import placeholderSky from "../placeholder/placeholder_sky.jpg"
 import PlaceholderMap from '../placeholder/PlacerholderMap';
@@ -80,7 +81,7 @@ function App() {
                   <Route path="/collision-surveillance" element={<CollisionData />} />
                   <Route path="/altitude-control" element={<AltitudeControl />} />
                   <Route path="/emergency-service" element={<PlaceholderMap />} />
-                  <Route path="/traffic-heatmap" element={<PlaceholderMap />} />
+                  <Route path="/traffic-heatmap" element={<HeatMap />} />
                   <Route path="/turbulence-detection" element={<PlaceholderMap />} />
                   <Route path="*" element={<h4 className='error'> Page not existent </h4>} />
                 </Routes>
