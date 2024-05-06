@@ -60,7 +60,8 @@ const Map = ({
         let shortestDistance = Infinity;
         flight.waypoints.path.forEach((waypoint1) => {
           otherFlightData.waypoints.path.forEach((waypoint2) => {
-            const distance = calculateDistance(waypoint1.latitude, waypoint1.longitude, waypoint1.altitude, waypoint2.latitude, waypoint2.longitude, waypoint2.altitude);
+            const distance = calculateDistance(waypoint1.latitude, waypoint1.longitude, 
+              waypoint1.altitude, waypoint2.latitude, waypoint2.longitude, waypoint2.altitude);
             
             if (distance < shortestDistance) {
               shortestDistance = distance;
@@ -74,14 +75,16 @@ const Map = ({
             message = 'No collision predicted.';
           } else {
             message = selectedFlight1 === flight.flight.callsign
-              ? `Possible collision with ${selectedFlight2} predicted.<br/> Air Traffic Control Notified.<br/>Closest distance: ${shortestDistance.toFixed(2)} meters`
-              : `Possible collision with ${selectedFlight1} predicted.<br/> Air Traffic Control Notified.<br/>Closest distance: ${shortestDistance.toFixed(2)} meters`;
+              ? `Possible collision with <b>${selectedFlight2}</b> 
+              predicted.<br/> Air Traffic Control Notified.<br/><b>Closest distance:</b> ${shortestDistance.toFixed(2)} meters`
+              : `Possible collision with <b>${selectedFlight1}</b> 
+              predicted.<br/> Air Traffic Control Notified.<br/><b>Closest distance:</b> ${shortestDistance.toFixed(2)} meters`;
           }
         } else {
           message = 'No collision predicted.';
         }
     
-        marker.bindPopup(`Flight: ${flight.flight.callsign}<br/>${message}`);
+        marker.bindPopup(`<b>Flight: ${flight.flight.callsign}</b><br/>${message}`, { autoClose: false, closeOnClick: false });
         if (selectedFlight1 === flight.flight.callsign && index === selectedWaypointIndex1) {
           marker.openPopup();
         }
