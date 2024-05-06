@@ -1,5 +1,5 @@
-import "./AltitudeControl.css";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
+import './AltitudeControl.css';
 import FlightsDisplay from "./components/FlightsDisplay.jsx";
 import Filter from "./components/Filter.jsx";
 import Warning from "./components/Warning.jsx";
@@ -20,6 +20,7 @@ const AltitudeControl = () => {
     const [selectedFilter, setSelectedFilter] = useState('');
     const [activeTab, setActiveTab] = useState('live-map');
     const [currentCallSign, setCurrentCallSign] = useState('');
+    const [mapCenter, setMapCenter] = useState(null);
 
     useEffect(() => {
         fetchInitialData();
@@ -29,40 +30,53 @@ const AltitudeControl = () => {
         setFilteredFlights(applyFlightFilter(flights, selectedFilter));
     }, [flights, selectedFilter]);
 
-    const fetchInitialData = () => {
-        fetchAirports();
-        fetchAndFilterFlights();
+    useEffect(() => {
+        setCurrentCallSign('');
+    }, []);
+
+    useEffect(() => {
+        if (currentCallSign && filteredFlights.length > 0) {
+            const selectedFlight = filteredFlights.find(flight => flight.callsign === currentCallSign);
+            if (selectedFlight) {
+                setMapCenter({ longitude: selectedFlight.longitude, latitude: selectedFlight.latitude });
+            }
+        }
+    }, [currentCallSign, filteredFlights]);
+
+    const fetchInitialData = async () => {
+        await fetchAirports();
+        await fetchAndFilterFlights();
     };
 
-    const fetchAirports = () => {
-        FetchAirports()
-            .then(setAirports)
-            .catch(() => {
-                console.error('Failed to fetch airport data');
-                setAirports([]);
-            });
+    const fetchAirports = async () => {
+        try {
+            const airportsData = await FetchAirports();
+            setAirports(airportsData);
+        } catch (error) {
+            console.error('Failed to fetch airport data');
+            setAirports([]);
+        }
     };
 
-    const fetchAndFilterFlights = () => {
-        Promise.all([FetchAirspaces(), FetchFlights()])
-            .then(([airspacesData, flightsData]) => {
-                setAirspaces(airspacesData);
-                setFlights(flightsData);
-    
-                const filtered = applyFlightFilter(flightsData, selectedFilter);
-                setFilteredFlights(filtered);
-    
-                const activeWarnings = CheckAltitudes(filtered, airspacesData);
-                setWarnings(activeWarnings);
-                setShowWarnings(true);
-            })
-            .catch(error => {
-                console.error('Failed to fetch flights or airspaces:', error);
-                setAirspaces([]);
-                setFlights([]);
-                setWarnings([]);
-                setShowWarnings(false);
-            });
+    const fetchAndFilterFlights = async () => {
+        try {
+            const [airspacesData, flightsData] = await Promise.all([FetchAirspaces(), FetchFlights()]);
+            setAirspaces(airspacesData);
+            setFlights(flightsData);
+
+            const filtered = applyFlightFilter(flightsData, selectedFilter);
+            setFilteredFlights(filtered);
+
+            const activeWarnings = CheckAltitudes(filtered, airspacesData);
+            setWarnings(activeWarnings);
+            setShowWarnings(true);
+        } catch (error) {
+            console.error('Failed to fetch flights or airspaces:', error);
+            setAirspaces([]);
+            setFlights([]);
+            setWarnings([]);
+            setShowWarnings(false);
+        }
     };
 
     const applyFlightFilter = (flights, filter) => {
@@ -81,28 +95,26 @@ const AltitudeControl = () => {
     return (
         <div className="altitude-window">
             <div className="info-description">
-                <h2>Welcome to the Altitude Supervision!</h2>
+                <h2 className="altitude-title">Welcome to the Altitude Supervision!</h2>
             </div>
             <div className="altitude-content">
                 <div className="details">
-                <h1>Active Flights:</h1>
+                    <h1>Active Flights:</h1>
                     <button className="refresh-button" onClick={fetchAndFilterFlights}>Refresh Flights and Map & Show Warnings</button>
                     <Filter setSelectedFilter={setSelectedFilter} />
                     <FlightsDisplay flights={filteredFlights} />
                     {warnings && warnings.length > 0 && showWarnings && (
-                        <Warning warnings={warnings} onClose={() => { setWarnings([]); setShowWarnings(false); }} onCallSignExtracted={setCurrentCallSign}/>
+                        <Warning warnings={warnings} onClose={() => { setWarnings([]); setShowWarnings(false); }} onCallSignExtracted={setCurrentCallSign} />
                     )}
                 </div>
                 <div className="details">
                     <div className="tab-content">
-                        {activeTab === 'live-map' && <div><h1 className="map-title">Live Data Map</h1><LiveMap airports={airports} airspaces={airspaces} flights={filteredFlights} /></div>}
+                        {activeTab === 'live-map' && <div><h1 className="map-title">Live Data Map</h1><LiveMap airports={airports} airspaces={airspaces} flights={filteredFlights} center={mapCenter} /></div>}
                         {activeTab === 'altitude-map' && <div><h1 className="map-title">Airspace Visualization Map</h1><AltitudeMap /></div>}
-                        {activeTab === 'test-map' && <div> <h1 className="map-title">Test Map Data</h1><LiveMap airports={''} airspaces={''} /></div>}
                     </div>
                     <div className="tab-selector">
                         <button id="tab-button" style={{ borderRight: 'none' }} onClick={() => setActiveTab('live-map')} className={activeTab === 'live-map' ? 'active' : ''}>Live Map</button>
                         <button id="tab-button" onClick={() => setActiveTab('altitude-map')} className={activeTab === 'altitude-map' ? 'active' : ''}>Airspace Map</button>
-                        <button id="tab-button" style={{ borderLeft: 'none' }} onClick={() => setActiveTab('test-map')} className={activeTab === 'test-map' ? 'active' : ''}>Test Map</button>
                     </div>
                 </div>
             </div>

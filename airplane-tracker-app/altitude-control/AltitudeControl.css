@@ -8,8 +8,14 @@
 .info-description {
     display: flex;
     color: black;
-    font-size: large;
     text-decoration: underline;
+    padding: 0px;
+    margin: 0px;
+}
+
+.altitude-title {
+    font-size: x-large;    
+    margin: 10px;
 }
 
 
@@ -36,11 +42,11 @@
     background-color: rgb(177, 177, 177);
     border: 2px solid black;
     border-radius: 10px 0 0 10px;
-    padding: 0 50px 50px;
+    padding: 0px 50px 20px 50px;
     margin: 3px;
     overflow-y: auto;
-    max-height: 500px;
-    min-height: 550px;
+    max-height: 580px;
+    min-height: 500px;
 }
 
 .flight-details {

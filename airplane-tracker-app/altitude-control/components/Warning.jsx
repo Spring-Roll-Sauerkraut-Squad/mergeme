@@ -6,8 +6,7 @@ const Warning = ({ warnings, onClose, onCallSignExtracted }) => {
 
     const handleWarningClick = (warning, index) => {
         const callSign = getCallSign(warning);
-        console.log(callSign);
-        alert(`Warning for Flight: \n[ ${callSign} ] \n\nDetails: \n  ${warning}`);
+        //alert(`Warning for Flight: \n[ ${callSign} ] \n\nDetails: \n  ${warning}`);
         onCallSignExtracted(callSign);
         setActiveWarningIndex(index);
     };
