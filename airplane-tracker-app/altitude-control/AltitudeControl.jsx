@@ -19,6 +19,7 @@ const AltitudeControl = () => {
     const [showWarnings, setShowWarnings] = useState(false);
     const [selectedFilter, setSelectedFilter] = useState('');
     const [activeTab, setActiveTab] = useState('live-map');
+    const [currentCallSign, setCurrentCallSign] = useState('');
 
     useEffect(() => {
         fetchInitialData();
@@ -89,7 +90,7 @@ const AltitudeControl = () => {
                     <Filter setSelectedFilter={setSelectedFilter} />
                     <FlightsDisplay flights={filteredFlights} />
                     {warnings && warnings.length > 0 && showWarnings && (
-                        <Warning warnings={warnings} onClose={() => { setWarnings([]); setShowWarnings(false); }} />
+                        <Warning warnings={warnings} onClose={() => { setWarnings([]); setShowWarnings(false); }} onCallSignExtracted={setCurrentCallSign}/>
                     )}
                 </div>
                 <div className="details">

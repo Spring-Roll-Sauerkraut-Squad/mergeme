@@ -19,7 +19,7 @@
     border-radius: 10px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     min-height: 600px;
-    min-width: 600px;
+    min-width: 900px;
     text-align: center;
     position: relative;
     box-shadow: 0 10px 20px rgba(0, 0, 0, 1);
@@ -86,8 +86,9 @@
 }
 
 .warning-description {
+    font-size: x-large;
     border-bottom: 2px solid black;
-    padding: 10px; 
+    padding-bottom: 10px; 
 }
 
 .close-button {
@@ -107,4 +108,23 @@
 .close-button:hover {
     background-color: red;
     color: white;
+}
+
+.clickable-warning {
+    text-align: left;
+    text-indent: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border: 2px solid #000000;
+    padding: 8px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.clickable-warning:hover {
+    background-color: #4e5257;
+}
+
+.active {
+    background-color: #1178ff;
 }

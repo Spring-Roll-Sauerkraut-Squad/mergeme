@@ -23,7 +23,7 @@ const CheckAltitudes = (flights, airspaces) => {
         });
 
         if (!isCompliant) {
-            warnings.push(`Flight ${flight.callsign} at altitude ${flight.altitude} is out of bounds at location ${flight.longitude}, ${flight.latitude}`);
+            warnings.push(`Flight: ${flight.callsign || "[ no callsign provided ]"} \nat altitude: \n  ${flight.altitude} ft \nis out of bounds at location: \n  ${flight.longitude} long. | ${flight.latitude} lat.`);
         }
     });
     return warnings;
