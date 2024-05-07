@@ -71,10 +71,9 @@ async function saveToMongoDB(data) {
         const database = client.db('aircraftTracker');
         const collection = database.collection('aircraft-waypoints');
 
-        // Delete old data
+
         await collection.deleteMany({});
 
-        // Insert new data
         for (const item of data) {
             await collection.insertOne(item);
         }
