@@ -1,7 +1,7 @@
 import styles from './HeatMap.module.css'
 import React, {useState} from 'react'
 import { GoogleMap, useJsApiLoader, HeatmapLayer } from '@react-google-maps/api';
-import {getHitoricalHeatmapPositions} from './Api'
+import {getHitoricalHeatmapPositions, getHitoricalTopAirports, getHitoricalTopLines} from './Api'
 
 const containerStyle = {
     width: '1600px',
@@ -25,6 +25,9 @@ function HeatMap() {
 
     const [heatmapLayerHistorical, setHeatmapLayerHistorical] = useState( /**  @type google.maps.visualization.HeatmapLayer */ (null))
     const [heatmapLayerRealtime, setHeatmapLayerRealtime] = useState( /**  @type google.maps.visualization.HeatmapLayer */ (null))
+
+    const [topAirports, setTopAirports] = useState([]);
+    const [topLines, setTopLines] = useState([])
 
     const onLoadHistorical = (heatmapLayer) => {
         setHeatmapLayerHistorical(heatmapLayer);
@@ -68,12 +71,23 @@ function HeatMap() {
       };
 
     const handleTimeRangeSubmit = () => {
-        console.log('Start Date: ', startDate);
-        console.log('End Date: ', endDate);
+        console.log('Time Range Submitted: ', startDate, ' to ', endDate);
 
-        const responseData = fetchHistoricalHeatmapPositions(startDate, endDate);
+        const responseTopAirports = getHitoricalTopAirports(startDate, endDate);
+        responseTopAirports.then((data) => {
+            console.log('Top Airports: ', data);
+            setTopAirports(data);
+        });
 
-        responseData.then((data) => {
+        const responseTopLines = getHitoricalTopLines(startDate, endDate);
+        responseTopLines.then((data) => {
+            console.log('Top Lines: ', data);
+            setTopLines(data);
+        });
+
+        const responseHeatmapPositions = fetchHistoricalHeatmapPositions(startDate, endDate);
+
+        responseHeatmapPositions.then((data) => {
             const heatmapData = data.map((position) => {
                 return {
                     location: new google.maps.LatLng(position.latitude, position.longitude),
@@ -91,7 +105,6 @@ function HeatMap() {
 
         <div className= {styles.heatmap}>
 
-
             <h1>Historical Heatmap</h1>
 
             <label>Start Date: </label>
@@ -103,35 +116,20 @@ function HeatMap() {
             <div className={styles.top10data}>
                 <div>  <h3>Top 10 Airports</h3>
                     <ul>
-                        <li>Frankfurt</li>
-                        <li>Heathrow</li>
-                        <li>Amsterdam</li>
-                        <li>Charles de Gaulle</li>
-                        <li>Madrid</li>
-                        <li>Barajas</li>
-                        <li>Barcelona</li>
-                        <li>Malaga</li>
-                        <li>Palma de Mallorca</li>
-                        <li>Vienna</li>
+                        {topAirports.map((airport, index) => {
+                            return <li key={index}>{airport.airportName + ' (' + airport.airportCode + '): ' + airport.totalFlights}</li>
+                        })}
                     </ul>
                 </div>
                 <div>  <h3>Top 10 Routes</h3>
                     <ul>
-                        <li>Frankfurt</li>
-                        <li>Heathrow</li>
-                        <li>Amsterdam</li>
-                        <li>Charles de Gaulle</li>
-                        <li>Madrid</li>
-                        <li>Barajas</li>
-                        <li>Barcelona</li>
-                        <li>Malaga</li>
-                        <li>Palma de Mallorca</li>
-                        <li>Vienna</li>
+                        {topLines.map((line, index) => {
+                            return <li key={index}>{line.originAirportName + ' ⇒ ' + line.destinationAirportName + ': ' + line.totalFlights}</li>
+                        })}
                     </ul>
                 </div>
             </div>
             
-
             <GoogleMap
             mapContainerStyle={containerStyle} center={center} zoom={2.5}>
                 
