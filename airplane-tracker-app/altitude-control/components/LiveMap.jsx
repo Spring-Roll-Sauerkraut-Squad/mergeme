@@ -1,14 +1,70 @@
 import "./LiveMap.css";
+import 'leaflet/dist/leaflet.css';
 import React, { useEffect, useRef } from 'react';
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import planeIcon from "../plane1.svg";
 
-const LiveMap = ({ airports, airspaces, flights, center }) => {
+const LiveMap = ({ airports, airspaces, flights, center, selectedFlight }) => {
   const mapRef = useRef(null);
   const pingRef = useRef(null);
   const horizontalLineRef = useRef(null);
   const verticalLineRef = useRef(null);
+  const lineRef = useRef(null);
+
+  const calculateDistance = (lat1, lon1, lat2, lon2) => {
+    const R = 6371; // Earth's radius in km
+    const dLat = (lat2 - lat1) * Math.PI / 180;
+    const dLon = (lon2 - lon1) * Math.PI / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return R * c;
+  };
+
+  const findNearestAirport = () => {
+    if (!selectedFlight || airports.length === 0) return null;
+
+    let nearestAirport = null;
+    let minDist = Infinity;
+
+    airports.forEach(airport => {
+      const dist = calculateDistance(selectedFlight.latitude, selectedFlight.longitude, airport.latitude_deg, airport.longitude_deg);
+      if (dist < minDist) {
+        minDist = dist;
+        nearestAirport = airport;
+      }
+    });
+    return nearestAirport;
+  };
+
+  // Responsible for neares airport
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    if (selectedFlight) {
+      const nearestAirport = findNearestAirport();
+      if (nearestAirport) {
+        if (lineRef.current) {
+          lineRef.current.remove();
+        }
+
+        lineRef.current = L.polyline([
+          [selectedFlight.latitude, selectedFlight.longitude],
+          [nearestAirport.latitude_deg, nearestAirport.longitude_deg]
+        ], { color: 'green' }).addTo(map);
+
+        setTimeout(() => {
+          if (lineRef.current) {
+            lineRef.current.remove();
+            lineRef.current = null;
+          }
+        }, 10000);
+      }
+    }
+  }, [selectedFlight]);
 
   //Responsible for Maintaining the Map
   useEffect(() => {

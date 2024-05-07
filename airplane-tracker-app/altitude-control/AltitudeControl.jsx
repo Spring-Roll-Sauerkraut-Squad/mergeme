@@ -21,6 +21,7 @@ const AltitudeControl = () => {
     const [activeTab, setActiveTab] = useState('live-map');
     const [currentCallSign, setCurrentCallSign] = useState('');
     const [mapCenter, setMapCenter] = useState(null);
+    const [selectedFlight, setSelectedFlight] = useState(null);
 
     useEffect(() => {
         fetchInitialData();
@@ -37,6 +38,7 @@ const AltitudeControl = () => {
     useEffect(() => {
         if (currentCallSign && filteredFlights.length > 0) {
             const selectedFlight = filteredFlights.find(flight => flight.callsign === currentCallSign);
+            setSelectedFlight(selectedFlight);
             if (selectedFlight) {
                 setMapCenter({ longitude: selectedFlight.longitude, latitude: selectedFlight.latitude });
             }
@@ -63,10 +65,8 @@ const AltitudeControl = () => {
             const [airspacesData, flightsData] = await Promise.all([FetchAirspaces(), FetchFlights()]);
             setAirspaces(airspacesData);
             setFlights(flightsData);
-
             const filtered = applyFlightFilter(flightsData, selectedFilter);
             setFilteredFlights(filtered);
-
             const activeWarnings = CheckAltitudes(filtered, airspacesData);
             setWarnings(activeWarnings);
             setShowWarnings(true);
@@ -109,7 +109,7 @@ const AltitudeControl = () => {
                 </div>
                 <div className="details">
                     <div className="tab-content">
-                        {activeTab === 'live-map' && <div><h1 className="map-title">Live Data Map</h1><LiveMap airports={airports} airspaces={airspaces} flights={filteredFlights} center={mapCenter} /></div>}
+                        {activeTab === 'live-map' && <div><h1 className="map-title">Live Data Map</h1><LiveMap airports={airports} airspaces={airspaces} flights={filteredFlights} center={mapCenter} selectedFlight={selectedFlight} /></div>}
                         {activeTab === 'altitude-map' && <div><h1 className="map-title">Airspace Visualization Map</h1><AltitudeMap /></div>}
                     </div>
                     <div className="tab-selector">
