@@ -48,6 +48,8 @@ MATCH (flight:Flight {flight_id: row.uuid})
 MATCH (airport:Airport {airport_code: row.destination})
 CREATE (flight)-[:ARRIVES_AT {created_at: datetime()}]->(airport);
 
+// Create more essential indexes
+CREATE INDEX idx_flight_date FOR (f:Flight) ON (f.flight_date)
  
 // Query top 10 airports within a specific time range
 MATCH (flight:Flight)-[:DEPARTS_FROM]->(airport:Airport)
