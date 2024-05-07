@@ -39,7 +39,7 @@ const LiveMap = ({ airports, airspaces, flights, center, selectedFlight }) => {
     return nearestAirport;
   };
 
-  // Responsible for neares airport
+  // Responsible for finding neares airport
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
@@ -61,7 +61,7 @@ const LiveMap = ({ airports, airspaces, flights, center, selectedFlight }) => {
             lineRef.current.remove();
             lineRef.current = null;
           }
-        }, 10000);
+        }, 11000);
       }
     }
   }, [selectedFlight]);
@@ -188,7 +188,7 @@ const LiveMap = ({ airports, airspaces, flights, center, selectedFlight }) => {
           mapRef.current.removeLayer(verticalLineRef.current);
           verticalLineRef.current = null;
         }
-      }, 10000);
+      }, 11000);
     }
   }, [center]);
 
