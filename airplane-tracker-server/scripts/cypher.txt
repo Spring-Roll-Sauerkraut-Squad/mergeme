@@ -81,3 +81,21 @@ MATCH (flight:Flight)-[:DEPARTS_FROM|ARRIVES_AT]->(airport:Airport)
 WHERE flight.flight_date >= '2019-01-01' AND flight.flight_date <= '2019-01-31'
 RETURN airport.latitude AS latitude, airport.longitude AS longitude, COUNT(*) AS count
 ORDER BY count(*) DESC
+
+
+// Query by flight_id for dummy tata
+MATCH (flight:Flight)
+WHERE flight.flight_id >= 'flight_id'
+WITH flight
+LIMIT 100
+OPTIONAL MATCH (flight)-[:DEPARTS_FROM]->(departureAirport:Airport)
+OPTIONAL MATCH (flight)-[:ARRIVES_AT]->(arrivalAirport:Airport)
+RETURN flight.flight_id AS flightID,
+       departureAirport.airport_code AS departureAirportCode,
+       departureAirport.airport_name AS departureAirportName,
+       departureAirport.latitude AS departureLatitude,
+       departureAirport.longitude AS departureLongitude,
+       arrivalAirport.airport_code AS arrivalAirportCode,
+       arrivalAirport.airport_name AS arrivalAirportName,
+       arrivalAirport.latitude AS arrivalLatitude,
+       arrivalAirport.longitude AS arrivalLongitude
