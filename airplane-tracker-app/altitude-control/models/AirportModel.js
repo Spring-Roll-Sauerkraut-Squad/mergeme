@@ -11,11 +11,3 @@ const airportSchema = new mongoose.Schema({
 const Airport = mongoose.model('Airport', airportSchema);
 
 export default Airport;
-
-/*
-const airportSchema = new mongoose.Schema({
-    name: { type: String, required: true },
-    latitude_deg: { type: Number, required: true },
-    longitude_deg: { type: Number, required: true }
-});
-*/

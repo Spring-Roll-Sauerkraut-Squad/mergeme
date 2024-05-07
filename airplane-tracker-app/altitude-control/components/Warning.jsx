@@ -6,13 +6,12 @@ const Warning = ({ warnings, onClose, onCallSignExtracted }) => {
 
     const handleWarningClick = (warning, index) => {
         const callSign = getCallSign(warning);
-        //alert(`Warning for Flight: \n[ ${callSign} ] \n\nDetails: \n  ${warning}`);
         onCallSignExtracted(callSign);
         setActiveWarningIndex(index);
     };
 
     const getCallSign = (warning) => {
-        const match = warning.match(/Flight: (\[.*?\]|[^ ]+)/);  // Match either a bracketed placeholder or the first word after "Flight:"
+        const match = warning.match(/Flight: (\[.*?\]|[^ ]+)/);
         return match ? match[1] : null;
     };
 

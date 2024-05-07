@@ -1,12 +1,10 @@
 import './AltitudeControl.css';
 import React, { useState, useEffect } from 'react';
-
 import FlightsDisplay from "./components/FlightsDisplay.jsx";
 import Filter from "./components/Filter.jsx";
 import Warning from "./components/Warning.jsx";
 import LiveMap from "./components/LiveMap.jsx";
 import AltitudeMap from "./components/AltitudeMap.jsx";
-
 import FetchAirspaces from "./scripts/FetchAirspaces.jsx";
 import FetchAirports from "./scripts/FetchAirports.jsx";
 import FetchFlights from "./scripts/FetchFlights.jsx";

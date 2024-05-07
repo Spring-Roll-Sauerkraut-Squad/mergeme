@@ -6,7 +6,7 @@ const router = express.Router();
 router.get('/', async (req, res) => {
     let countryCode = req.query.iso_country || "DE";
     let type_large = "large_airport";
-    let type_large_medium = req.query.type ? req.query.type.split(',') : ["large_airport", "medium_airport"];
+    //let type_large_medium = req.query.type ? req.query.type.split(',') : ["large_airport", "medium_airport"];
 
     try {
         const airports = await Airport.find({

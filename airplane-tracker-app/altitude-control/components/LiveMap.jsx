@@ -107,17 +107,17 @@ const LiveMap = ({ airports, airspaces, flights, center }) => {
         radius: 500
       }).addTo(mapRef.current);
 
-      const radiusInDegrees = 500 / 111320;  
+      const radiusInDegrees = 500 / 111320;
 
       horizontalLineRef.current = L.polyline([
-        [center.latitude, center.longitude - 1.5*radiusInDegrees],
-        [center.latitude, center.longitude + 1.5*radiusInDegrees]
-      ], {color: 'black'}).addTo(mapRef.current);
+        [center.latitude, center.longitude - 1.5 * radiusInDegrees],
+        [center.latitude, center.longitude + 1.5 * radiusInDegrees]
+      ], { color: 'black' }).addTo(mapRef.current);
 
       verticalLineRef.current = L.polyline([
         [center.latitude - radiusInDegrees, center.longitude],
         [center.latitude + radiusInDegrees, center.longitude]
-      ], {color: 'black'}).addTo(mapRef.current);
+      ], { color: 'black' }).addTo(mapRef.current);
 
       setTimeout(() => {
         if (pingRef.current) {
