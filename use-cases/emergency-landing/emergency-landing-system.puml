@@ -1,0 +1,35 @@
+@startuml
+(Emergency Landing System)
+skinparam packageStyle rectangle
+
+rectangle MongoDB {
+   json Static_Data {
+     "Airport": "Location",
+     "Airport": "Type",
+     "Airport": "Altitute"
+   }
+}
+
+rectangle OSN_API {
+   json Dynamic_Data {
+     "Aircraft": "Callsign",
+     "Aircraft": "Location",
+     "Aircraft": "Geo Altitude"
+   }
+}
+
+:MongoDB: -down-> (Emergency Landing System) : Updates Data
+:OSN_API: -down-> (Emergency Landing System) : Updates Data
+
+note top of MongoDB : DB Updates on Application Start
+note top of OSN_API : API gets called continuously for real time Airplane Data
+
+:Air Traffic Control: -right-> :Pilot: : Alerts 
+
+(Emergency Landing System) -right-> :Pilot: : Displays
+(Emergency Landing System) -down-> :Air Traffic Control: : Displays
+
+note right of Pilot : Gets closest recommended airport displayed
+
+
+@enduml

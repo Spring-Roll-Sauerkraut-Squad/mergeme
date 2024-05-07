@@ -6,7 +6,7 @@ import AirportRoutes from './routes/AirportRoutes.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
-const mongoURI = process.env.MONGO_URI;
+const mongoURI = process.env.ME_CONFIG_MONGODB_URL;
 
 const options = {
     useNewUrlParser: true,
