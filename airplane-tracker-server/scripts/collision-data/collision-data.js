@@ -22,7 +22,7 @@ const extractWaypoints = async () => {
 
     
     if (!WaypointModel) {
-      WaypointModel = mongoose.model('Aircraft-waypoint', new mongoose.Schema({}, { strict: false }));
+      WaypointModel = mongoose.model('Aircraft-waypoints', new mongoose.Schema({}, { strict: false }));
     }
 
     const waypoints = await WaypointModel.find({})

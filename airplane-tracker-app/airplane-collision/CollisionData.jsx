@@ -26,6 +26,14 @@ const CollisionData = () => {
     fetchData();
   }, []);
 
+  const onWaypointClick = (flight, waypointIndex) => {
+    if (flight === selectedFlight1) {
+      setSelectedWaypointIndex1(waypointIndex);
+    } else if (flight === selectedFlight2) {
+      setSelectedWaypointIndex2(waypointIndex);
+    }
+  };
+
 
   const handleWaypointChange = (flightNumber, increment) => {
     const setWaypointIndex = flightNumber === 1 ? setSelectedWaypointIndex1 : setSelectedWaypointIndex2;
@@ -94,6 +102,7 @@ const CollisionData = () => {
         selectedFlight2={selectedFlight2}
         selectedWaypointIndex1={selectedWaypointIndex1}
         selectedWaypointIndex2={selectedWaypointIndex2}
+        onWaypointClick={onWaypointClick}
       />
       <div className="flight-data">
         <h2>Flight Data</h2>

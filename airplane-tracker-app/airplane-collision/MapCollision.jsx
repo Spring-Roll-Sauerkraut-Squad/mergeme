@@ -10,10 +10,12 @@ const Map = ({
   selectedFlight2,
   selectedWaypointIndex1,
   selectedWaypointIndex2,
+  onWaypointClick,
 }) => {
   const mapRef = useRef(null);
   const markersRef = useRef([]);
-  const [zoomLevel, setZoomLevel] = useState(8); 
+  const zoomLevel = 9;
+  const [mousePosition, setMousePosition] = useState({ latitude: 0, longitude: 0 });
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -22,12 +24,18 @@ const Map = ({
 
     const firstFlight = airplanes.find(({ flight }) => flight.callsign === selectedFlight1);
     const firstWaypoint = firstFlight?.waypoints.path[0];
-    map.setView([firstWaypoint?.latitude || 49.4, firstWaypoint?.longitude || 8.7], zoomLevel); 
+    map.setView([firstWaypoint?.latitude || 49.4, firstWaypoint?.longitude || 8.7], zoomLevel);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 19,
     }).addTo(map);
+
+    const mouseMoveHandler = (e) => {
+      setMousePosition({ latitude: e.latlng.lat, longitude: e.latlng.lng });
+    };
+
+    map.on('mousemove', mouseMoveHandler);
 
     const drawFlightPath = (flight, color) => {
       const latlngs = flight.waypoints.path.map(waypoint => [waypoint.latitude, waypoint.longitude]);
@@ -48,8 +56,6 @@ const Map = ({
       const d = Math.sqrt(c * c + Δh * Δh);
       return R * d; 
     };
-    
-    
     const addMarkers = (flight, color) => {
       const flightMarkers = flight.waypoints.path.map((waypoint, index) => {
         const marker = L.circleMarker([waypoint.latitude, waypoint.longitude], { color, radius: 5 }).addTo(map);
@@ -74,28 +80,34 @@ const Map = ({
           if (selectedFlight1 === selectedFlight2) {
             message = 'No collision predicted.';
           } else {
-            message = selectedFlight1 === flight.flight.callsign
-              ? `Possible collision with <b>${selectedFlight2}</b> 
-              predicted.<br/> Air Traffic Control Notified.<br/><b>Closest distance:</b> ${shortestDistance.toFixed(2)} meters`
-              : `Possible collision with <b>${selectedFlight1}</b> 
-              predicted.<br/> Air Traffic Control Notified.<br/><b>Closest distance:</b> ${shortestDistance.toFixed(2)} meters`;
+            message = `<b><a href="#" class="waypoint-link" data-flight="${flight.flight.callsign}" data-waypoint="${index}">Waypoint: ${index + 1}</a></b> of Flight: <b>${flight.flight.callsign}</b><br/>`;
+            message += `Possible collision with <b>${selectedFlight2}</b> predicted.<br/>`;
+            message += `Air Traffic Control Notified.<br/>`;
+            message += `<b>Closest distance:</b> ${shortestDistance.toFixed(2)} meters`;
           }
         } else {
           message = 'No collision predicted.';
         }
     
-        marker.bindPopup(`<b>Flight: ${flight.flight.callsign}</b><br/>${message}`, { autoClose: false, closeOnClick: false });
+        marker.bindPopup(`${message}`, { autoClose: false, closeOnClick: false });
         if (selectedFlight1 === flight.flight.callsign && index === selectedWaypointIndex1) {
           marker.openPopup();
         }
+    
+        marker.on('popupopen', (e) => {
+          const popup = e.popup;
+          popup.getElement().querySelector('.waypoint-link').addEventListener('click', (clickEvent) => {
+            clickEvent.preventDefault();
+            const flight = clickEvent.target.dataset.flight;
+            const waypointIndex = parseInt(clickEvent.target.dataset.waypoint, 10);
+            onWaypointClick(flight, waypointIndex);
+          });
+        });
+    
         return marker;
       });
       markersRef.current.push(...flightMarkers);
     };
-    
-    
-    
-    
     
     const addPlaneIcons = (flight, svgImage, waypointIndex) => {
       const waypoint = flight.waypoints.path[waypointIndex];
@@ -126,16 +138,20 @@ const Map = ({
       addPlaneIcons(selectedFlightData2, Plane2SVG, selectedWaypointIndex2);
     }
 
-    map.on('zoomend', () => {
-      setZoomLevel(map.getZoom());
-    });
-
     return () => {
+      map.off('mousemove', mouseMoveHandler);
       map.remove();
     };
-  }, [airplanes, selectedFlight1, selectedFlight2, selectedWaypointIndex1, selectedWaypointIndex2]);
+  }, [airplanes, selectedFlight1, selectedFlight2, selectedWaypointIndex1, selectedWaypointIndex2, zoomLevel]);
 
-  return <div id="map" style={{ width: '1700px', height: '1500px', margin: 'auto' }} ref={mapRef}></div>;
+  return (
+    <div>
+      <div id="map" style={{ width: '1700px', height: '1500px', margin: 'auto' }} ref={mapRef}></div>
+      <div style={{ position: 'absolute', bottom: 10, left: 10, backgroundColor: 'white', padding: 5, border: '1px solid black',color: 'black' }}>
+      Longitude: {mousePosition.longitude.toFixed(6)}, Latitude: {mousePosition.latitude.toFixed(6)}
+      </div>
+    </div>
+  );
 };
 
 export default Map;
