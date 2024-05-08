@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import PlaneSVG from './plane1.svg'; 
-import config from './config';
+import { fetchWeatherData } from './fetchWeatherData';
 
 const Map = ({ airplane, selectedFlight, selectedWaypointIndex }) => {
   const mapRef = useRef(null);
@@ -27,6 +27,18 @@ const Map = ({ airplane, selectedFlight, selectedWaypointIndex }) => {
       L.polyline(latlngs, { color }).addTo(map);
     };
 
+    const createPopupContent = (weatherData, markerColor) => {
+      if (markerColor === 'red') {
+        return `<b>Turbulence Warning</b> <br/> Gust Speed: ${weatherData.current.gust_kph} KPH 
+                <br/> Wind Speed :${weatherData.current.wind_kph} KPH
+                <br/> Temperature : ${weatherData.current.temp_c}°C
+                <br/> Pressure : ${weatherData.current.pressure_mb} MB
+                <br/> Humidity : ${weatherData.current.humidity}`;
+      } else {
+        return `Flight: ${selectedFlight} <br/>No Turbulence detected`;
+      }
+    };
+
     const addMarkers = async (flight, color) => {
       const flightMarkers = [];
       let redMarkerOpened = false; 
@@ -39,18 +51,13 @@ const Map = ({ airplane, selectedFlight, selectedWaypointIndex }) => {
         try {
           const response = await fetchWeatherData(waypoint.latitude, waypoint.longitude);
           const weatherData = await response.json();
-    
           if (weatherData.current.gust_kph > 24.4 || weatherData.current.wind_kph > 12) {
             markerColor = 'red';
             if (!redMarkerOpened) {
               redMarkerOpened = true;
               openedPopup = L.popup({ autoClose: false, closeOnClick: false })
                 .setLatLng([waypoint.latitude, waypoint.longitude])
-                .setContent(`<b>Turbulence Warning</b> <br/> Gust Speed: ${weatherData.current.gust_kph} KPH
-                <br/> Wind Speed : ${weatherData.current.wind_kph} KPH
-                <br/> Temperature : ${weatherData.current.temp_c}°C
-                <br/> Pressure : ${weatherData.current.pressure_mb} MB
-                <br/> Humidity : ${weatherData.current.humidity}`)
+                .setContent(createPopupContent(weatherData, markerColor))
                 .openOn(map);
             }
           } else {
@@ -60,35 +67,18 @@ const Map = ({ airplane, selectedFlight, selectedWaypointIndex }) => {
           const marker = L.circleMarker([waypoint.latitude, waypoint.longitude], { color: markerColor, radius: 5 }).addTo(map);
     
           marker.on('click', () => {
-            const message = markerColor === 'red' ? `<b>Turbulence Warning</b> <br/> Gust Speed: ${weatherData.current.gust_kph} KPH 
-                <br/> Wind Speed :${weatherData.current.wind_kph} KPH
-                <br/> Temperature : ${weatherData.current.temp_c}°C
-                <br/> Pressure : ${weatherData.current.pressure_mb} MB
-                <br/> Humidity : ${weatherData.current.humidity}` 
-              : `Flight: ${flight.flight.callsign}`;
+            const message = createPopupContent(weatherData, markerColor);
             marker.bindPopup(message, { autoClose: false, closeOnClick: false }).openPopup();
           });
     
           flightMarkers.push(marker);
         } catch (error) {
           console.error('Error fetching weather data:', error);
+          continue;
         }
       }
     
       markersRef.current.push(...flightMarkers);
-    };
-    
-    
-    const fetchWeatherData = async (latitude, longitude) => {
-      try {
-        const apiKey = config.apiKey;
-        const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}`;
-        const response = await fetch(url);
-        return response;
-      } catch (error) {
-        console.error('Error fetching weather data:', error);
-        throw error; 
-      }
     };
     
     const addPlaneIcon = (flight, svgImage, waypointIndex) => {
