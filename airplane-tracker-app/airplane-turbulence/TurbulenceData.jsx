@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../airplane-turbulence/TurbulenceData.css';
-import fetchWaypoints from '../../airplane-tracker-server/scripts/collision-data/fetch-waypoint-data.js';
+import fetchWaypoints from '../../airplane-tracker-server/scripts/fetch-waypoint-data.js';
 import Map from './MapTurbulence.jsx'; 
 import config from './config';
 

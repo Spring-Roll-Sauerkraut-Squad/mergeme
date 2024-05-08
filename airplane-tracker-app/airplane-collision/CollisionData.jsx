@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../airplane-collision/CollisionData.css';
-import fetchWaypoints from '../../airplane-tracker-server/scripts/collision-data/fetch-waypoint-data.js';
+import fetchWaypoints from '../../airplane-tracker-server/scripts/fetch-waypoint-data.js';
 import Map from './MapCollision.jsx'; 
 
 const CollisionData = () => {
