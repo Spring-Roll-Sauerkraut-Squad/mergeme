@@ -10,7 +10,12 @@ const EmergencyLanding = () => {
         const fetchData = async () => {
             try {
                 const data = await FetchAirportsData();
-                setAirports(data);
+                // Filter airports with iso_country 'DE'
+                const filteredAirports = data.filter(airport => (
+                    airport.iso_country === 'DE' && 
+                    (airport.type === 'small_airport' || airport.type === 'medium_airport' || airport.type === 'large_airport')
+                ));
+                setAirports(filteredAirports);
                 //console.log(data); //Log MongoDB Fetch Data
             } catch (error) {
                 console.error('Error fetching data:', error);

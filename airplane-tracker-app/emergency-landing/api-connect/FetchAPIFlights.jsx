@@ -13,6 +13,7 @@ export async function FetchAPIFlights() {
         const response = await axios.get(url, {
             headers: { Authorization: basicAuth }
         });
+        
         const rawData = response.data;
         const filteredData = rawData.states.map(state => ({
             ica024: state[0],

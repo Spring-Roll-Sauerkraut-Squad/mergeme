@@ -35,25 +35,24 @@ const AirportsMap = ({ airports }) => {
       popupAnchor: [1, -34],
       shadowSize: [41, 41]
     });
-
+    
     //Place marker for each Airport location
     airports.forEach(airport => {
-      // Check if airport has location property and it's an array with at least one element
-      if (airport.location && Array.isArray(airport.location) && airport.location.length > 0) {
-        L.marker([airport.location[0].latitude, airport.location[0].longitude], { icon: airportMarker })
+        L.marker([airport.latitude_deg, airport.longitude_deg], { icon: airportMarker })
           .addTo(map)
           .bindPopup(`${airport.name}<br>Type: ${airport.type}`);
-      }
     });
+    
 
     //Fetch data from OpenSky API
     const fetchData = async () => {
       try {
-        const data = await FetchAPIFlights();
-        setFlights(data);
-        //console.log(data); //console log opensky api data
+        const airplaneData = await FetchAPIFlights();
 
-        //Place marker for each
+      //setFlights(airplaneData);
+        //console.log(airplaneData); //console log opensky api data
+
+        //Place marker for each airplane
         flights.forEach(flight => {
           if ([2, 3, 4, 5, 6].includes(flight.category)) {
             const flightPosition = L.latLng(flight.latitude, flight.longitude);
@@ -100,7 +99,9 @@ const AirportsMap = ({ airports }) => {
 
     return closestAirport;
   };
-  console.log("refreshed");
+
+  console.log("refreshed"); //just for consol log clarity
+
   return <div id="marker-map"></div>;
 };
 
