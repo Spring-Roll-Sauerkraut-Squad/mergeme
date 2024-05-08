@@ -60,11 +60,40 @@ const AirportsMap = ({ airports }) => {
 
   useEffect(() => {
     flights.forEach(flight => {
-      L.marker([flight.latitude, flight.longitude], { icon: flightMarker })
-        .addTo(map)
-        .bindPopup(`Flight: ${flight.callsign}<br>Country: ${flight.originCountry}<br>Altitude: ${flight.altitude} meters`);
+      if ([2, 3, 4, 5, 6].includes(flight.category)) {
+        const flightPosition = L.latLng(flight.latitude, flight.longitude);
+        const closestAirport = findClosestAirport(flightPosition, airports, flight.category);
+
+        if (closestAirport) {
+          L.marker([flight.latitude, flight.longitude], { icon: flightMarker })
+            .addTo(map)
+            .bindPopup(`Flight: ${flight.callsign}<br>Category: ${flight.category}<br>Closest Airport: ${closestAirport.name}`);
+        }
+      }
     });
-  }, [flights]);
+  }, [flights, airports]);
+
+// Function to find the closest airport of the same type (size) as the airplane
+const findClosestAirport = (flightPosition, airports, category) => {
+  let closestAirport = null;
+  let minDistance = Infinity;
+
+  const validTypes = ["small_airport", "medium_airport", "large_airport"];
+
+  airports.forEach(airport => {
+    if (validTypes.includes(airport.type)) {
+      const airportPosition = L.latLng(airport.location[0].latitude, airport.location[0].longitude);
+      const distance = flightPosition.distanceTo(airportPosition);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestAirport = airport;
+      }
+    }
+  });
+
+  return closestAirport;
+};
 
   return <div id="marker-map"></div>;
 };
