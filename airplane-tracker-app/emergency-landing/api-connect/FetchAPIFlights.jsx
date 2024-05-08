@@ -2,8 +2,10 @@ import axios from 'axios';
 
 export async function FetchAPIFlights() {
     console.log('recieved api flight data');
-    const username = process.env.USERNAME_API;
-    const password = process.env.PASSWORD_API;
+    //const username = process.env.USERNAME_API;
+    //const password = process.env.PASSWORD_API;
+    const username = "FAH";
+    const password = "TL]M2{C632Z+";
     const basicAuth = 'Basic ' + btoa(username + ':' + password);
     const url = "https://opensky-network.org/api/states/own";
     

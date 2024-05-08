@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./MarkerMap.css";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -6,6 +6,7 @@ import { FetchAPIFlights } from '../api-connect/FetchAPIFlights';
 
 const AirportsMap = ({ airports }) => {
   const [flights, setFlights] = useState([]);
+  console.log(airports);
 
   useEffect(() => {
     const map = L.map('airports-map').setView([49.4, 8.7], 5);
@@ -14,6 +15,16 @@ const AirportsMap = ({ airports }) => {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       maxZoom: 19,
     }).addTo(map);
+
+    // Green Marker - Airplanes
+    const airplaneMarker = new L.Icon({
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41]
+    });
 
     // Red Marker - Airports
     const airportMarker = new L.Icon({
@@ -25,27 +36,33 @@ const AirportsMap = ({ airports }) => {
       shadowSize: [41, 41]
     });
 
-    // Green Marker - Flights
-    const flightMarker = new L.Icon({
-      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
-      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    });
-
+    //Place marker for each Airport location
     airports.forEach(airport => {
-      const popupContent = `${airport.name}<br>Type: ${airport.type}`;
       L.marker([airport.location[0].latitude, airport.location[0].longitude], { icon: airportMarker })
         .addTo(map)
-        .bindPopup(popupContent);
+        .bindPopup(`${airport.name}<br>Type: ${airport.type}`);
     });
 
+    //Fetch data from OpenSky API
     const fetchData = async () => {
       try {
         const data = await FetchAPIFlights();
         setFlights(data);
+        //console.log(data); //console log opensky api data
+
+        //Place marker for each
+        flights.forEach(flight => {
+          if ([2, 3, 4, 5, 6].includes(flight.category)) {
+            const flightPosition = L.latLng(flight.latitude, flight.longitude);
+            const closestAirport = findClosestAirport(flightPosition, airports, flight.category);
+
+            if (closestAirport) {
+              L.marker([flight.latitude, flight.longitude], { icon: airplaneMarker })
+                .addTo(map)
+                .bindPopup(`Flight: ${flight.callsign}<br>Category: ${flight.category}<br>Closest Airport: ${closestAirport.name}`);
+            }
+          }
+        });
       } catch (error) {
         console.error('Error fetching flights:', error);
       }
@@ -56,44 +73,29 @@ const AirportsMap = ({ airports }) => {
     return () => {
       map.remove();
     };
-  }, [airports]);
+  }, [airports]); // We only need to watch for changes in airports array
 
-  useEffect(() => {
-    flights.forEach(flight => {
-      if ([2, 3, 4, 5, 6].includes(flight.category)) {
-        const flightPosition = L.latLng(flight.latitude, flight.longitude);
-        const closestAirport = findClosestAirport(flightPosition, airports, flight.category);
+  // Function to find the closest airport of the same type (size) as the airplane
+  const findClosestAirport = (flightPosition, airports, category) => {
+    let closestAirport = null;
+    let minDistance = Infinity;
 
-        if (closestAirport) {
-          L.marker([flight.latitude, flight.longitude], { icon: flightMarker })
-            .addTo(map)
-            .bindPopup(`Flight: ${flight.callsign}<br>Category: ${flight.category}<br>Closest Airport: ${closestAirport.name}`);
+    const validTypes = ["small_airport", "medium_airport", "large_airport"];
+
+    airports.forEach(airport => {
+      if (validTypes.includes(airport.type)) {
+        const airportPosition = L.latLng(airport.location[0].latitude, airport.location[0].longitude);
+        const distance = flightPosition.distanceTo(airportPosition);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestAirport = airport;
         }
       }
     });
-  }, [flights, airports]);
 
-// Function to find the closest airport of the same type (size) as the airplane
-const findClosestAirport = (flightPosition, airports, category) => {
-  let closestAirport = null;
-  let minDistance = Infinity;
-
-  const validTypes = ["small_airport", "medium_airport", "large_airport"];
-
-  airports.forEach(airport => {
-    if (validTypes.includes(airport.type)) {
-      const airportPosition = L.latLng(airport.location[0].latitude, airport.location[0].longitude);
-      const distance = flightPosition.distanceTo(airportPosition);
-
-      if (distance < minDistance) {
-        minDistance = distance;
-        closestAirport = airport;
-      }
-    }
-  });
-
-  return closestAirport;
-};
+    return closestAirport;
+  };
 
   return <div id="marker-map"></div>;
 };

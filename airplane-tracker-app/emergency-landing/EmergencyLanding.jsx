@@ -1,6 +1,6 @@
 import "./EmergencyLanding.css";
 import React, { useState, useEffect } from "react";
-import AirportsMap from "./components/MarkerMap.jsx";
+import MarkerMap from "./components/MarkerMap.jsx";
 import FetchAirportsData from "./data-fetch/FetchAirportsData.jsx";
 
 const EmergencyLanding = () => {
@@ -20,7 +20,7 @@ const EmergencyLanding = () => {
             <div className="emergencylanding-content">
                 <div className="airports-map">
                     <h1> | Airports Location | </h1>
-                    <AirportsMap airports={airports} />
+                    <MarkerMap airports={airports} />
                 </div>
             </div>
         </div >
