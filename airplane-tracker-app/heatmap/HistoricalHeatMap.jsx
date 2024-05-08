@@ -23,12 +23,29 @@ function HistoricalHeatMap() {
         libraries
     })
 
+    useEffect(() => {
+        console.log('Component updated', heatmapLayerHistorical);
+      });
+    
+
     const [heatmapLayerHistorical, setHeatmapLayerHistorical] = useState( /**  @type google.maps.visualization.HeatmapLayer */ (null))
 
     const [topAirports, setTopAirports] = useState([]);
     const [topLines, setTopLines] = useState([])
+    const [heatmapData, setHeatmapData] = useState([])
+
+    useEffect(() => {
+        
+        if(heatmapLayerHistorical){
+            console.log('Historical HeatmapLayer Updated', heatmapData.length);
+            heatmapLayerHistorical.setData(heatmapData);
+            heatmapLayerHistorical.setOptions({radius: 24}); //maxIntensity: 500
+            setHeatmapLayerHistorical(heatmapLayerHistorical);
+        }
+    }, [heatmapData, heatmapLayerHistorical]);
 
     const onLoadHistorical = (heatmapLayer) => {
+        heatmapLayer.setOptions({radius: 25}); //maxIntensity: 500
         setHeatmapLayerHistorical(heatmapLayer);
         console.log('Historical HeatmapLayer Onload : ', heatmapLayer);
     }
@@ -59,37 +76,35 @@ function HistoricalHeatMap() {
         }
       };
 
-    const handleTimeRangeSubmit = () => {
+      const handleTimeRangeSubmit = async () => {
         console.log('Time Range Submitted: ', startDate, ' to ', endDate);
-
-        const responseTopAirports = getHitoricalTopAirports(startDate, endDate);
-        responseTopAirports.then((data) => {
-            console.log('Top Airports: ', data);
-            setTopAirports(data);
-        });
-
-        const responseTopLines = getHitoricalTopLines(startDate, endDate);
-        responseTopLines.then((data) => {
-            console.log('Top Lines: ', data);
-            setTopLines(data);
-        });
-
-        const responseHeatmapPositions = fetchHistoricalHeatmapPositions(startDate, endDate);
-
-        responseHeatmapPositions.then((data) => {
-            const heatmapData = data.map((position) => {
+    
+        try {
+            const responseTopAirports = await getHitoricalTopAirports(startDate, endDate);
+            console.log('Top Airports: ', responseTopAirports);
+            setTopAirports(responseTopAirports);
+    
+            const responseTopLines = await getHitoricalTopLines(startDate, endDate);
+            console.log('Top Lines: ', responseTopLines);
+            setTopLines(responseTopLines);
+    
+            const responseHeatmapPositions = await fetchHistoricalHeatmapPositions(startDate, endDate);
+            console.log('Heatmap Positions Size: ', responseHeatmapPositions.length);
+    
+            const positions = responseHeatmapPositions.map((position) => {
                 return {
                     location: new google.maps.LatLng(position.latitude, position.longitude),
                     weight: position.count
                 }
             });
-            heatmapLayerHistorical.setOptions({radius: 20}); //maxIntensity: 500
-            heatmapLayerHistorical.setData(heatmapData);
-            
-            console.log('Hitorical HeatmapLayer Data Size: ', heatmapLayerHistorical.getData().getLength());
-        });
+    
+            setHeatmapData(positions);
+            console.log('Historical HeatmapLayer Data Size: ', positions.length);
+        } catch (error) {
+            console.error('Error fetching historical heatmap data: ', error);
+        }
     };
-
+    
     return isLoaded ? (
 
         <div className= {styles.heatmap}>

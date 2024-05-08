@@ -67,7 +67,7 @@ function RealtimeHeatMap() {
     }, [heatmapLayerRealtime, realtimeMockData]);
 
     const onLoadRealtime = (heatmapLayer) => {
-        heatmapLayer.setOptions({ radius: 20 });
+        heatmapLayer.setOptions({ radius: 30});
         heatmapLayerRealtime = heatmapLayer;
         setHeatmapLayerRealtime(heatmapLayer);
         console.log('Realtime HeatmapLayer Onload : ', heatmapLayerRealtime);

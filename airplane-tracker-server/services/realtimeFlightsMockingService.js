@@ -14,7 +14,7 @@ const getDataFromNeo4j = async (flightID) => {
       MATCH (flight:Flight)
       WHERE flight.flight_id >= $flightID
       WITH flight
-      LIMIT 100
+      LIMIT 20
       OPTIONAL MATCH (flight)-[:DEPARTS_FROM]->(departureAirport:Airport)
       OPTIONAL MATCH (flight)-[:ARRIVES_AT]->(arrivalAirport:Airport)
       RETURN flight.flight_id AS flightID,

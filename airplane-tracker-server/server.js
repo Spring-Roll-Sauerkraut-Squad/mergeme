@@ -77,7 +77,7 @@ const fetchAndStoreData = async () => {
 
 
 // Every n seconds
-const intervalId = setInterval(fetchAndStoreData, 10 * 1000);
+const intervalId = setInterval(fetchAndStoreData, 3 * 1000);
 
 // Start the WebSocket server
 io.on('connection', socket => {
