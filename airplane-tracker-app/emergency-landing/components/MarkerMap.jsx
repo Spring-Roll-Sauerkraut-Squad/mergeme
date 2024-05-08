@@ -9,7 +9,7 @@ const AirportsMap = ({ airports }) => {
   console.log(airports);
 
   useEffect(() => {
-    const map = L.map('airports-map').setView([49.4, 8.7], 5);
+    const map = L.map('marker-map').setView([49.4, 8.7], 5);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
@@ -38,9 +38,12 @@ const AirportsMap = ({ airports }) => {
 
     //Place marker for each Airport location
     airports.forEach(airport => {
-      L.marker([airport.location[0].latitude, airport.location[0].longitude], { icon: airportMarker })
-        .addTo(map)
-        .bindPopup(`${airport.name}<br>Type: ${airport.type}`);
+      // Check if airport has location property and it's an array with at least one element
+      if (airport.location && Array.isArray(airport.location) && airport.location.length > 0) {
+        L.marker([airport.location[0].latitude, airport.location[0].longitude], { icon: airportMarker })
+          .addTo(map)
+          .bindPopup(`${airport.name}<br>Type: ${airport.type}`);
+      }
     });
 
     //Fetch data from OpenSky API
@@ -68,12 +71,13 @@ const AirportsMap = ({ airports }) => {
       }
     };
 
-    fetchData();
+    //fetchData();
 
     return () => {
       map.remove();
     };
-  }, [airports]); // We only need to watch for changes in airports array
+
+  }, [airports]);
 
   // Function to find the closest airport of the same type (size) as the airplane
   const findClosestAirport = (flightPosition, airports, category) => {
@@ -96,7 +100,7 @@ const AirportsMap = ({ airports }) => {
 
     return closestAirport;
   };
-
+  console.log("refreshed");
   return <div id="marker-map"></div>;
 };
 

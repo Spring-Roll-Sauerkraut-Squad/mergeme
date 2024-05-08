@@ -1,15 +1,22 @@
 import "./EmergencyLanding.css";
 import React, { useState, useEffect } from "react";
 import MarkerMap from "./components/MarkerMap.jsx";
-import FetchAirportsData from "./data-fetch/FetchAirportsData.jsx";
+import FetchAirportsData from "../../airplane-tracker-server/scripts/fetch-airport-data.js"
 
 const EmergencyLanding = () => {
     const [airports, setAirports] = useState([]);
 
     useEffect(() => {
-        FetchAirportsData().then(data => {
-            setAirports(data);
-        })
+        const fetchData = async () => {
+            try {
+                const data = await FetchAirportsData();
+                setAirports(data);
+                //console.log(data); //Log MongoDB Fetch Data
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+        fetchData();
     }, []);
 
     return (
