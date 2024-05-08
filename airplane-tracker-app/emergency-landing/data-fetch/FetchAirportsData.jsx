@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-const FetchEmergencyAirports = () => {
+const FetchAirports = () => {
     return axios.get('http://localhost:3000/api/airports')
         .then(response => response.data)
         .catch(error => {
-            console.error('Error fetching emergency airports:', error);
+            console.error('Error fetching airports:', error);
             return [];
         });
 }
 
-export default FetchEmergencyAirports;
+export default FetchAirports;
