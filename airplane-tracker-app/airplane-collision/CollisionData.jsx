@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import '../airplane-collision/CollisionData.css';
-import fetchWaypoints from '../../airplane-tracker-server/scripts/collision-data/fetch-waypoint-data.js';
+import fetchWaypoints from '../../airplane-tracker-server/scripts/fetch-waypoint-data.js';
 import Map from './MapCollision.jsx'; 
 
 const CollisionData = () => {
@@ -25,6 +25,14 @@ const CollisionData = () => {
     };
     fetchData();
   }, []);
+
+  const onWaypointClick = (flight, waypointIndex) => {
+    if (flight === selectedFlight1) {
+      setSelectedWaypointIndex1(waypointIndex);
+    } else if (flight === selectedFlight2) {
+      setSelectedWaypointIndex2(waypointIndex);
+    }
+  };
 
 
   const handleWaypointChange = (flightNumber, increment) => {
@@ -94,6 +102,7 @@ const CollisionData = () => {
         selectedFlight2={selectedFlight2}
         selectedWaypointIndex1={selectedWaypointIndex1}
         selectedWaypointIndex2={selectedWaypointIndex2}
+        onWaypointClick={onWaypointClick}
       />
       <div className="flight-data">
         <h2>Flight Data</h2>

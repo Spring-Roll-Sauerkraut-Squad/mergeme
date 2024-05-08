@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import '../airplane-turbulence/TurbulenceData.css';
-import fetchWaypoints from '../../airplane-tracker-server/scripts/collision-data/fetch-waypoint-data.js';
+import fetchWaypoints from '../../airplane-tracker-server/scripts/fetch-waypoint-data.js';
 import Map from './MapTurbulence.jsx'; 
-import config from './config';
+import { fetchWeatherData } from './fetchWeatherData.js';
 
 const TurbulenceData = () => {
   const [airplanes, setAirplanes] = useState([]);
@@ -25,28 +25,19 @@ const TurbulenceData = () => {
     fetchData();
   }, []);
 
-  const fetchWeatherData = async (latitude, longitude) => {
-    try {
-      const apiKey = config.apiKey; 
-      const url = `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=${latitude},${longitude}`;
-      const response = await fetch(url);
-      const data = await response.json();
-      setWeatherData(data);
-    } catch (error) {
-      console.error('Error fetching weather data:', error);
-    }
-  };
-
   useEffect(() => {
     if (selectedFlight && airplanes.length > 0) {
       const selectedAirplane = airplanes.find(({ flight }) => flight.callsign === selectedFlight);
       if (selectedAirplane && selectedAirplane.waypoints && selectedAirplane.waypoints.path[selectedWaypointIndex]) {
         const { latitude, longitude } = selectedAirplane.waypoints.path[selectedWaypointIndex];
-        fetchWeatherData(latitude, longitude);
+        fetchWeatherData(latitude, longitude) 
+          .then(response => response.json())
+          .then(data => setWeatherData(data))
+          .catch(error => console.error('Error fetching weather data:', error));
       }
     }
   }, [selectedFlight, selectedWaypointIndex, airplanes]);
-
+  
   const handleWaypointChange = (increment) => {
     setSelectedWaypointIndex(prevIndex => Math.max(0, Math.min(prevIndex + increment, 
       airplanes.find(airplane => airplane.flight.callsign === selectedFlight)?.waypoints.path.length - 1)));
