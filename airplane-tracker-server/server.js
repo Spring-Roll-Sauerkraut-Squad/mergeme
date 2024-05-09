@@ -37,7 +37,7 @@ const fetchDataFromHistoricalDB = () => {
   return getRealtimeMockingFlights();
 };
 
-// fetch data from the historical database and store it in Redis, and trigger a WebSocket event
+// fetch data from the historical database and store it in Redis, and trigger a WebSocket event to send the mock data to the client
 const fetchAndStoreData = async () => {
   const realtimeFlights = await fetchDataFromHistoricalDB();
   console.log('Realtime Flights Size: ', realtimeFlights.length);
@@ -76,7 +76,7 @@ const fetchAndStoreData = async () => {
 };
 
 
-// Every n seconds
+// Every 3 seconds
 const intervalId = setInterval(fetchAndStoreData, 3 * 1000);
 
 // Start the WebSocket server
