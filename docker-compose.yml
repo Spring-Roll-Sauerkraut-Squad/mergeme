@@ -40,6 +40,7 @@ services:
       - ./volumes/neo4j/logs:/logs
       - ./volumes/neo4j/import:/var/lib/neo4j/import
       - ./volumes/neo4j/plugins:/plugins
+      - ./volumes/neo4j/conf:/var/lib/neo4j/conf
   redis:
     image: redis
     restart: always
