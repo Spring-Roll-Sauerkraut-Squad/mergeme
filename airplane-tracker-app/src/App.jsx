@@ -1,11 +1,11 @@
 import './App.css';
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-
 import CollisionData from '../airplane-collision/CollisionData';
 import AltitudeControl from '../altitude-control/AltitudeControl';
 import HeatMap from '../heatmap/HeatMap';
-
+import TurbulenceData from '../../airplane-tracker-app/airplane-turbulence/TurbulenceData';
+import EmergencyLandingSystem from '../emergency-landing/EmergencyLanding';
 import placeholderSky from "../placeholder/placeholder_sky.jpg"
 import PlaceholderMap from '../placeholder/PlacerholderMap';
 
@@ -17,7 +17,7 @@ function App() {
   };
 
   const handleTitleClick = () => {
-    setActiveButton(null); // Reset activeButton state when title is clicked
+    setActiveButton(null); 
   };
 
   return (
@@ -80,9 +80,9 @@ function App() {
                 <Route path="/" element={<PlaceholderMap />} />
                   <Route path="/collision-surveillance" element={<CollisionData />} />
                   <Route path="/altitude-control" element={<AltitudeControl />} />
-                  <Route path="/emergency-service" element={<PlaceholderMap />} />
                   <Route path="/traffic-heatmap" element={<HeatMap />} />
-                  <Route path="/turbulence-detection" element={<PlaceholderMap />} />
+                  <Route path="/emergency-service" element={<EmergencyLandingSystem />} />
+                  <Route path="/turbulence-detection" element={<TurbulenceData />} />
                   <Route path="*" element={<h4 className='error'> Page not existent </h4>} />
                 </Routes>
               </div>

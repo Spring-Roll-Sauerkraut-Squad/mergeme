@@ -1,0 +1,97 @@
+.turbulence-container {
+  position: relative;
+}
+
+.turbulence-table-wrapper {
+  max-height: 2000px; 
+  max-width: 500px;
+  overflow-y: auto;
+  margin-bottom: 20px; 
+}
+
+.turbulence-weather-table-wrapper {
+  max-width: 410px;
+  text-align: center;
+  border: 2px solid black;
+  border-radius: 10px 0px 0px 10px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 5px;
+  padding: 20px;
+  width: 500px; 
+  height: 610px;  
+  transform: translateY(0%);
+}
+
+.flightHeader{
+  text-align: right;
+  color: #030000;
+}
+
+.selectFlight{
+  border: 2px solid black;
+  border-radius: 10px 0px 0px 10px;
+  width: 40%;
+  padding: 10px;
+  font-size: 16px; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  margin-left: 10%;
+  margin-right: 6%;
+
+}
+
+.turbulence-flight-data h2,
+.turbulence-weather-table-wrapper th,
+.turbulence-weather-table-wrapper td {
+  text-align: center; 
+  color: #030000;
+}
+
+.turbulence-flight-data-table,
+.turbulence-weather-data-table {
+  border: 2px solid black;
+  border-radius: 10px 0px 0px 10px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.turbulence-flight-data th,
+.turbulence-flight-data td,
+.turbulence-weather-data-table th,
+.turbulence-weather-data-table td {
+  border: 1px solid #030000;
+  padding: 10px;
+  text-align: left;
+  color: #030000;
+}
+
+.turbulence-flight-data select,
+.turbulence-weather-data-table select {
+  border: 2px solid black;
+  border-radius: 10px 0px 0px 10px;
+  width: 100%;
+  padding: 10px;
+  font-size: 16px; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.turbulence-button-group button {
+  margin: 2%;
+  width: 180px;
+  margin-top: -20px;
+}
+
+#map {
+  z-index: 0;
+  border: 2px solid black;
+  border-radius: 10px 0px 0px 10px;
+  max-width: 1550px;
+  overflow-y: auto;
+  max-height: 650px;
+  min-height: 650px;
+}

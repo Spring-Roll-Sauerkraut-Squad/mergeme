@@ -1,0 +1,56 @@
+.altitude-window {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.info-description {
+    color: black;
+    font-size: large;
+    text-decoration: underline;
+    text-shadow: 5px 0 0 0;
+    padding: 0 5px 5px 5px;
+}
+
+.altitude-content {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+.flight-details {
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    background-color: rgb(177, 177, 177);
+    border: 2px solid black;
+    border-radius: 10px 0px 0px 10px;
+    padding: 0 50px 50px 50px;
+    margin: 3px;
+    overflow-y: auto;
+    max-height: 550px;
+    
+    min-height: 550px;
+    min-width: 500px;
+}
+
+.flight-map {
+    font-size: small;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 2;
+    background-color: rgb(177, 177, 177);
+    border: 2px solid black;
+    border-radius: 10px 0px 0px 10px;
+    padding: 0 50px 50px 50px;
+    margin: 3px;
+    overflow-y: auto;
+    max-height: 550px;
+    
+    min-height: 550px;
+    min-width: 1000px;
+}

@@ -1,16 +1,21 @@
 import express from 'express';
 import cors from 'cors';
-import extractWaypoints from './collision-data.js';
+import extractWaypoints from './fetch-mongo-data.js';
 
 const app = express();
 
-
 app.use(cors());
 
-app.get('/api/waypoints', async (req, res) => {
+app.get('/api/data', async (req, res) => {
   try {
-    const waypoints = await extractWaypoints();
-    res.json(waypoints); 
+    const { collectionName } = req.query;
+    if (!collectionName) {
+      return res.status(400).json({ error: 'Collection name is required' });
+    }
+
+   
+    const data = await extractWaypoints(collectionName);
+    res.json(data);
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal server error' });
