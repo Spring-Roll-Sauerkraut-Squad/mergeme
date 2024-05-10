@@ -1,27 +1,12 @@
 import "./FlightsDisplay.css"
-import React, { useState, useEffect } from 'react';
-import { FetchFlights } from "../scripts/FetchFlights";
+import React from 'react';
 
-function FlightsDisplay() {
-    const [flights, setFlights] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
+function FlightsDisplay({ flights }) {
+    if (!flights.length) return <div>No flight data available!</div>;
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setIsLoading(true);
-            const data = await FetchFlights();
-            setFlights(data);
-            setIsLoading(false);
-        };
-        fetchData();
-    }, []);
-
-    if (isLoading) return <div>Loading flights data...</div>;
-    if (!flights.length) return <div>No flight data available.</div>;
- 
     return (
         <div className="flight-data-container">
-            <h1 className="flight-data-header">All Fetched Flight Data: </h1>
+            <h1 className="flight-data-header">All Fetched Flight Data:</h1>
             {flights.map((flight, index) => (
                 <div key={index} className="flight-data-entry">
                     <p>ICAO24: {flight.icao24}</p>

@@ -1,0 +1,40 @@
+@startuml
+top to bottom direction
+
+database "MongoDB" as DB 
+
+database "OpenSky API" as OpenSky
+
+rectangle "Altitude Tracker Application" as Frontend
+
+rectangle "Local Express Server" as LS
+
+'actors
+actor "Airspace Supervisor" as AS
+actor "Air Traffic Control" as ATC
+actor "Aircraft Pilot" as Pilot
+
+    note "Provides Airport/Airspace Data" as N1
+    DB .down. N1
+    N1 .down.> LS
+
+    note "Provides Live Flight Data" as N2
+    OpenSky .down. N2
+    N2 .down.> LS
+
+    note "Supplies Data" as N3
+    LS .down. N3
+    N3 .down.> Frontend
+
+note left of DB : Static Data
+
+note right of OpenSky : DynamicData
+
+note left of LS: Handles Requests to Datasources
+
+note left of Frontend : Utilizes Data: \n   Displays Data on Maps and GUI Elements
+
+ATC .> Pilot : Alerts
+AS .> ATC : Informs
+Frontend .> AS : Recieves Warnings
+@enduml

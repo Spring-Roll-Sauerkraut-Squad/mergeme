@@ -1,0 +1,70 @@
+//UPDATED
+@startuml
+skinparam packageStyle rectangle
+'layout
+left to right direction
+
+'actors
+actor "Airspace Supervisor" as AS
+actor "Air Traffic Control" as ATC
+actor "Aircraft Pilot" as Pilot
+
+'system
+rectangle "Altitude Control System" {
+    usecase "Refresh Data to Altitude Control System" as UC2
+    usecase "Provides Data in Altitude Control System" as UC1
+    usecase "View Maps" as UC3
+    usecase "Display Warnings" as UC4
+    usecase "Refresh Flights and Map" as UC5
+    usecase "Filter Flights" as UC6
+    note right of UC3 : Displays Flight- and Airspace Data.
+    note right of UC6 : Filter for Speific Altitude.
+    note right of UC5 : Updates Live Data.
+    note right of UC4 : Notification Popup on Refresh.
+    note "initiate" as N1
+    UC2 <.down. N1
+   N1 .up. UC5
+}
+
+note top of AS : Dedicated User.
+
+AS <-- UC2 : "Fetches"
+UC2 --> UC1 : "<<includes>>"
+AS --> UC3 : "via Dragging"
+AS --> UC4 : "Handles"
+UC4 --> AS : "Notifies"
+ATC .> Pilot : "Alerts"
+ATC <.. AS : "Informs"
+AS --> UC6 : "via Dropdown"
+AS --> UC5 : "via Button"
+UC3 <. UC6 : "configures"
+@enduml
+
+
+// OLD 
+@startuml
+skinparam packageStyle rectangle
+'layout
+left to right direction
+
+'actors
+actor "Flight Supervisor" as FS
+actor "Air Traffic Control" as ATC
+actor "Pilot" as Pilot
+
+'system
+rectangle "Altitude Control System" {
+    usecase "Update Data to Altitude Control System" as UC1
+    usecase "Provides Data in Altitude Control System" as UC2
+    usecase "Operate Altitude Control System" as UC3
+    usecase "Handle Warnings" as UC4
+}
+
+FS <-down- UC1 : "Fetches"
+UC2 <-up- UC1 : "<<includes>>"
+FS -right-> UC3 : "Operates"
+FS -right-> UC4 : "Handles Warnings"
+UC4 -left-> FS : "Notifies"
+ATC -down-> Pilot : "Alerts Pilot"
+ATC <-right- FS : "Informs and Alerts"
+@enduml
