@@ -1,22 +1,20 @@
-
 .container {
   position: relative;
 }
 
 .flight-data {
   position: absolute;
+  border: 2px solid black;
+  border-radius: 10px 0px 0px 10px;
   top: 0;
   right: 0;
-  z-index: 2; 
+  z-index: 1;
   background-color: rgba(255, 255, 255, 0.8);
-  padding: 50px;
   border-radius: 5px;
-}
-
-
-.flight-data table {
-  width: 100%; 
-  border-collapse: collapse;
+  padding: 40px;
+  width: 500px; 
+  height: 570px;
+  transform: translateY(0%);
 }
 
 .flight-data h2 {
@@ -24,21 +22,75 @@
   color: #030000;
 }
 
+.table-wrapper {
+  max-height: 4000px; 
+  overflow-y: auto;
+  margin-bottom: 20px; 
+}
 
-.flight-data th {
-  border: 1px solid #030000; 
+.flight-data table {
+  border: 2px solid black;
+  border-radius: 10px 0px 0px 10px;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.flight-data th,
+.flight-data td {
+  border: 1px solid #030000;
   padding: 10px;
   text-align: left;
   color: #030000;
 }
 
-.flight-data td {
-  border: 1px solid #040000; 
-  padding: 8px;
-  text-align: center;
-  color: #030000;
+.flight-data select {
+  width: 100%;
+  padding: 10px;
+  font-size: 16px; 
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
-.leaflet-container {
-  z-index: 1; 
+.waypoint-list {
+  max-height: 200px; 
+  overflow-y: auto;
+}
+
+.waypoint {
+  margin-bottom: 10px; 
+}
+
+.waypoint p {
+  margin: 5px 0; 
+}
+
+.waypoint-number {
+  position: absolute; 
+  top: 0; 
+  left: 50%; 
+  transform: translateX(-50%); 
+  color: #030000; 
+  font-weight: bold;
+}
+
+.button-group {
+  float: right;
+  margin-top: -25%; 
+  transform: translateY(-50%); 
+}
+
+.button-group button {
+  margin: 5px 0; 
+  display: block; 
+  width: 100px;
+}
+
+#map {
+  z-index: 0;
+  border: 2px solid black;
+  border-radius: 10px 0px 0px 10px;
+  max-width: 1550px;
+  overflow-y: auto;
+  max-height: 650px;
+  min-height: 650px;
 }

@@ -4,25 +4,23 @@ left to right direction
 
 actor User as user
 
-package "Heatmap Page" {
-  usecase "View Real-time Learderboard/Heatmap" as view_real_time
-  usecase "View Historical Learderboard/Heatmap" as view_historical
-  usecase "Learderboard/Heatmap Filter" as filter
+ 
+usecase "View Real-time Leaderboard/Heatmap" as view_real_time
+usecase "View Historical Leaderboard/Heatmap" as view_historical
+usecase "Leaderboard/Heatmap Filter" as filter
 
-  user --> view_real_time
-  user --> view_historical
-  user --> filter
+user --> view_real_time
+user --> view_historical
+user --> filter
 
-  view_real_time <-- view_historical : <<extends>>
-}
+view_real_time <-- view_historical : <<extends>>
+
 note bottom of filter: Filter by time range
 
 note left of view_real_time
-Based on simulated real-time data, from the start of the day:
-Top 10 airports, routes
-Heatmaps: airports, routes
+Based on simulated data:
+* Top 10 airports, routes
+* Heatmaps: airports, routes
 end note
-
-note right of view_historical: Time range excludes today
 
 @enduml

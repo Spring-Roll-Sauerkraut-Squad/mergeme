@@ -1,6 +1,10 @@
 {
   "dependencies": {
+<<<<<<< HEAD
     "@turf/turf": "^6.5.0",
+=======
+    "cors": "^2.8.5",
+>>>>>>> main
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "mongoose": "^8.3.3"

@@ -1,6 +1,9 @@
 # Node Modules
 node_modules
 
+#API Keys
+config.js
+
 # Logs
 logs
 *.log
@@ -25,3 +28,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.env
